@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AMEE 2026 Symposium 效度師培互動課程 — 六章雙語內容、即時反思回饋與誤區分析儀表板。">
+<meta name="color-scheme" content="light dark">
 <title>效度新視界 Validity Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -209,7 +216,8 @@ th{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--i
 .twoshift{margin-top:26px; padding:22px 24px; display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:center}
 @media (max-width:560px){ .twoshift{grid-template-columns:1fr; gap:14px} }
 </style>
-
+</head>
+<body>
 <div class="top">
   <div class="top-in">
     <div class="brand">
@@ -247,7 +255,11 @@ const UI = {
     beyond:"部分內容取自模型自身知識，未經你審定", understand:"你已理解的部分", stillGap:"尚未觸及",
     clarify:"需要澄清", nextStep:"下一步建議", sufficiency:"知識充足度",
     addK:"新增審定知識", source:"出處（例：ten Cate 2024, Med Educ）", ktext:"知識內容（會作為 AI 回饋的依據）",
-    exportK:"匯出知識庫 JSON", importK:"匯入知識庫 JSON", del:"刪除" },
+    exportK:"匯出知識庫 JSON", importK:"匯入知識庫 JSON", del:"刪除",
+    settings:"AI 設定", aiSetup:"設定 AI 回饋", aiMode:"連線方式", aiOffMode:"關閉（只用規則回饋）",
+    aiKeyMode:"自帶 API key（直連 Anthropic）", aiProxyMode:"自訂代理端點（由你保管金鑰）",
+    aiKey:"Anthropic API key", aiEndpoint:"代理端點 URL", aiModel:"模型",
+    saveCfg:"儲存設定", testCfg:"測試連線", cfgOk:"連線成功", cfgSaved:"已儲存" },
   en:{ site:"Rethinking Validity", learner:"Learner", researcher:"Researcher", admin:"Admin", lang:"中文",
     home:"Home", chapters:"Chapters", profile:"My progress", dash:"Dashboard", content:"Content", roles:"Permissions",
     back:"Back to home", start:"Start learning", cont:"Continue", done:"Completed", ing:"In progress", not:"Not started",
@@ -264,7 +276,11 @@ const UI = {
     sufficiency:"Knowledge sufficiency",
     addK:"Add vetted knowledge", source:"Source (e.g. ten Cate 2024, Med Educ)",
     ktext:"Knowledge text (used as the basis for AI feedback)",
-    exportK:"Export knowledge JSON", importK:"Import knowledge JSON", del:"Delete" }
+    exportK:"Export knowledge JSON", importK:"Import knowledge JSON", del:"Delete",
+    settings:"AI settings", aiSetup:"Set up AI feedback", aiMode:"Connection", aiOffMode:"Off (rule-based feedback only)",
+    aiKeyMode:"Your own API key (direct to Anthropic)", aiProxyMode:"Your proxy endpoint (you hold the key)",
+    aiKey:"Anthropic API key", aiEndpoint:"Proxy endpoint URL", aiModel:"Model",
+    saveCfg:"Save settings", testCfg:"Test connection", cfgOk:"Connection works", cfgSaved:"Saved" }
 };
 
 /* ── state ──────────────────────────────── */
@@ -274,7 +290,8 @@ const UI = {
 const BAKED_KB = {};
 
 const KEY = "validity-lab-v1";
-let S = { lang:"zh", role:"LEARNER", view:"home", slug:null, progress:{}, responses:[], kb:{} };
+let S = { lang:"zh", role:"LEARNER", view:"home", slug:null, progress:{}, responses:[], kb:{},
+          ai:{ mode:"off", key:"", endpoint:"", model:"claude-sonnet-4-5" } };
 try{ const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); }catch(e){}
 const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
 
@@ -328,21 +345,73 @@ function analyze(text, rubric){
 }
 
 /* ── AI personalized feedback (the `sample` capability) ── */
-let sampleFn = null, sampleResolved = false, downloadsFn = null;
 const aiCtl = {};   // responseId -> AbortController
 
-function resolveCap(name, done){
-  try{
-    const pr = window.claude && window.claude.use && window.claude.use(name);
-    if(pr && pr.then){ pr.then(done).catch(()=>done(null)); return; }
-  }catch(e){}
-  done(null);
+/* AI transport for static hosting (GitHub Pages has no server of its own).
+   Two modes, chosen by the reader in Settings:
+     key   — the reader's own Anthropic API key, sent from their browser
+             straight to api.anthropic.com (CORS is enabled by the
+             anthropic-dangerous-direct-browser-access header). The key is
+             kept in this browser's localStorage and goes nowhere else.
+     proxy — a URL you host that holds the key server-side. The page POSTs
+             an Anthropic-shaped body and expects an Anthropic-shaped reply,
+             so a ~20-line forwarder is enough. Readers need no key.        */
+const DEFAULT_MODEL = "claude-sonnet-4-5";
+
+function aiCfg(){
+  S.ai = S.ai || { mode:"off", key:"", endpoint:"", model:DEFAULT_MODEL };
+  if(!S.ai.model) S.ai.model = DEFAULT_MODEL;
+  return S.ai;
 }
-resolveCap("sample", f => {
-  sampleFn = f; sampleResolved = true;
-  if(!document.querySelector("textarea:focus, input:focus")) render();
-});
-resolveCap("downloads", d => { downloadsFn = d; });
+function aiReady(){
+  const a = aiCfg();
+  return (a.mode === "key" && a.key.trim()) || (a.mode === "proxy" && a.endpoint.trim());
+}
+
+async function aiJson(prompt, opts){
+  const a = aiCfg();
+  const body = {
+    model: a.model,
+    max_tokens: 1500,
+    messages: [{ role:"user", content: prompt }]
+  };
+  let url, headers;
+  if(a.mode === "key"){
+    url = "https://api.anthropic.com/v1/messages";
+    headers = {
+      "content-type": "application/json",
+      "x-api-key": a.key.trim(),
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    };
+  } else {
+    url = a.endpoint.trim();
+    headers = { "content-type": "application/json" };
+  }
+
+  let res;
+  try{
+    res = await fetch(url, { method:"POST", headers, body: JSON.stringify(body), signal: opts && opts.signal });
+  }catch(e){
+    if(e && e.name === "AbortError") throw { code:"cancelled" };
+    throw { code:"network", message:String(e && e.message || e) };
+  }
+  if(!res.ok){
+    const txt = await res.text().catch(()=>"");
+    const code = res.status === 401 || res.status === 403 ? "auth"
+               : res.status === 429 ? "rate_limited"
+               : res.status >= 500 ? "upstream" : "bad_request";
+    throw { code, message: txt.slice(0,300) };
+  }
+
+  const data = await res.json();
+  const block = (data.content || []).find(b => b && b.type === "text");
+  const raw = (block && block.text) || data.text || "";
+  const a0 = raw.indexOf("{"), b0 = raw.lastIndexOf("}");
+  if(a0 < 0 || b0 < a0) throw { code:"invalid_json", message: raw.slice(0,300) };
+  try{ return JSON.parse(raw.slice(a0, b0+1)); }
+  catch(e){ throw { code:"invalid_json", message: raw.slice(0,300) }; }
+}
 
 function buildPrompt(r, q){
   const kb = kbFor(q.id);
@@ -386,12 +455,12 @@ function buildPrompt(r, q){
 async function runAI(respId){
   const r = S.responses.find(x => x.id === respId); if(!r) return;
   const q = allQ().find(x => x.id === r.questionId); if(!q) return;
-  if(!sampleFn){ r.ai = {status:"error", code:"unavailable"}; save(); render(); return; }
+  if(!aiReady()){ r.ai = {status:"error", code:"unconfigured"}; save(); render(); return; }
 
   const ctl = new AbortController(); aiCtl[respId] = ctl;
   r.ai = {status:"running", kbCount:kbFor(q.id).length}; save(); render();
   try{
-    const data = await sampleFn.json(buildPrompt(r, q), { signal: ctl.signal, modelTier:"default" });
+    const data = await aiJson(buildPrompt(r, q), { signal: ctl.signal });
     r.ai = {
       status:"done",
       kbCount: kbFor(q.id).length,
@@ -411,12 +480,14 @@ async function runAI(respId){
 
 function aiCopy(code){
   const m = {
-    not_granted: p("你選擇不使用 AI 回饋（或未授權）。可再按一次重新產生。","AI feedback was not allowed for this view. Press regenerate to ask again."),
-    rate_limited: p("請求過於頻繁，請稍候再試。","Too many requests — wait a moment and try again."),
+    unconfigured: p("尚未設定 AI 回饋，請到「AI 設定」填入 API key 或代理端點。","AI feedback is not configured — add an API key or proxy endpoint in AI settings."),
+    auth: p("API key 被拒絕（401／403）。請確認金鑰是否正確、是否仍有效。","The API key was rejected (401/403). Check that it is correct and still active."),
+    rate_limited: p("請求過於頻繁或額度用盡，請稍候再試。","Rate limited or out of quota — wait a moment and try again."),
+    network: p("無法連線。若使用自帶金鑰，可能是瀏覽器擋下了跨網域請求；改用代理端點通常可解決。","Could not connect. With a direct key this is usually a CORS block — a proxy endpoint avoids it."),
+    upstream: p("伺服器暫時無回應，請稍候重試。","The service is temporarily unavailable — try again shortly."),
+    bad_request: p("請求被拒絕，請檢查模型名稱與端點設定。","The request was refused — check the model name and endpoint settings."),
     invalid_json: p("模型回覆格式不正確，請重新產生。","The model's reply was malformed — try regenerating."),
-    cancelled: p("已停止。","Stopped."),
-    prompt_too_large: p("內容過長，無法送出分析。","The content was too long to analyze."),
-    unavailable: p("此環境無法使用 AI 回饋。","AI feedback is unavailable in this view.")
+    cancelled: p("已停止。","Stopped.")
   };
   return m[code] || p("AI 回饋失敗，請重新產生。","AI feedback failed — try regenerating.");
 }
@@ -424,8 +495,9 @@ function aiCopy(code){
 function renderAI(r){
   const ai = r.ai;
   if(!ai){
-    if(!sampleResolved) return "";
-    if(!sampleFn) return '<p class="muted" style="margin:10px 0 0">'+t("aiOff")+'</p>';
+    if(!aiReady())
+      return '<p class="muted" style="margin:10px 0 0">'+t("aiOff")+
+        ' <a href="#" data-go="settings" style="color:var(--accent)">'+t("aiSetup")+' →</a></p>';
     return '<button class="btn btn-o" style="margin-top:12px" data-ai="'+r.id+'">✦ '+t("askAI")+'</button>';
   }
   if(ai.status === "running")
@@ -497,10 +569,12 @@ function statusChip(st){
 function navItems(){
   if(S.role==="LEARNER") return [
     {v:"home", ico:"◈", label:t("home")},
-    {v:"profile", ico:"◔", label:t("profile")}
+    {v:"profile", ico:"◔", label:t("profile")},
+    {v:"settings", ico:"⚙", label:t("settings")}
   ];
   if(S.role==="RESEARCHER") return [
     {v:"dash", ico:"▤", label:t("dash")},
+    {v:"settings", ico:"⚙", label:t("settings")},
     {v:"home", ico:"◈", label:p("前台（學習端）","Front stage")}
   ];
   return [
@@ -508,6 +582,7 @@ function navItems(){
     {v:"content", ico:"✎", label:t("content")},
     {v:"kb", ico:"❋", label:t("kb")},
     {v:"roles", ico:"◎", label:t("roles")},
+    {v:"settings", ico:"⚙", label:t("settings")},
     {v:"home", ico:"◈", label:p("前台（學習端）","Front stage")}
   ];
 }
@@ -864,6 +939,38 @@ function viewKB(){
     '<textarea id="kbPaste" style="display:none"></textarea>';
 }
 
+function viewSettings(){
+  const a = aiCfg();
+  const opt = (v,label) => '<option value="'+v+'"'+(a.mode===v?" selected":"")+'>'+label+'</option>';
+  return '<h1 style="font-size:30px">'+t("settings")+'</h1>'+
+    '<p class="muted" style="margin:8px 0 22px;max-width:46em">'+
+      p("規則回饋不需要任何設定，一直都能用。<b>AI 個別化回饋</b>需要一個模型連線——這個頁面是純靜態網站，沒有自己的伺服器，所以連線方式由你選。",
+        "Rule-based feedback always works and needs no setup. <b>AI personalized feedback</b> needs a model connection — this is a static site with no server of its own, so you choose how to connect.")+'</p>'+
+    '<div class="card" style="padding:24px 26px;max-width:640px">'+
+      '<label class="lbl">'+t("aiMode")+'</label>'+
+      '<select id="ai-mode">'+opt("off",t("aiOffMode"))+opt("key",t("aiKeyMode"))+opt("proxy",t("aiProxyMode"))+'</select>'+
+      '<div style="margin-top:16px'+(a.mode==="key"?"":";display:none")+'" id="ai-key-box">'+
+        '<label class="lbl">'+t("aiKey")+'</label>'+
+        '<input id="ai-key" type="password" autocomplete="off" placeholder="sk-ant-…" value="'+esc(a.key)+'">'+
+        '<p class="muted" style="margin:8px 0 0">'+
+          p("金鑰只存在<b>這個瀏覽器</b>，只會送往 api.anthropic.com。公開網站上請勿使用機構共用金鑰；建議用個人金鑰並設定用量上限。",
+            "The key stays in <b>this browser</b> and is sent only to api.anthropic.com. Do not use a shared institutional key on a public site; use a personal key with a spend limit.")+'</p></div>'+
+      '<div style="margin-top:16px'+(a.mode==="proxy"?"":";display:none")+'" id="ai-proxy-box">'+
+        '<label class="lbl">'+t("aiEndpoint")+'</label>'+
+        '<input id="ai-endpoint" placeholder="https://your-worker.example.workers.dev/v1/messages" value="'+esc(a.endpoint)+'">'+
+        '<p class="muted" style="margin:8px 0 0">'+
+          p("端點收到 Anthropic 格式的 JSON，回傳 Anthropic 格式的回應即可（一個轉發用的 Cloudflare Worker 約 20 行）。金鑰留在你的伺服器，學員不必自備。",
+            "The endpoint receives an Anthropic-shaped JSON body and returns an Anthropic-shaped reply (a forwarding Cloudflare Worker is about 20 lines). The key stays on your server; readers need none.")+'</p></div>'+
+      '<div style="margin-top:16px'+(a.mode==="off"?";display:none":"")+'" id="ai-model-box">'+
+        '<label class="lbl">'+t("aiModel")+'</label>'+
+        '<input id="ai-model" value="'+esc(a.model)+'"></div>'+
+      '<div style="margin-top:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+
+        '<button class="btn" id="aiSave">'+t("saveCfg")+'</button>'+
+        '<button class="btn btn-o" id="aiTest">'+t("testCfg")+'</button>'+
+        '<span class="muted" id="aiMsg"></span></div>'+
+    '</div>';
+}
+
 function viewRoles(){
   const rows = [
     [p("瀏覽學習內容與作答","Read chapters and answer reflections"), 1,1,1],
@@ -908,11 +1015,12 @@ function render(){
   else if(S.view==="editor") html = viewEditor();
   else if(S.view==="roles") html = viewRoles();
   else if(S.view==="kb") html = viewKB();
+  else if(S.view==="settings") html = viewSettings();
   else html = viewHome();
 
   const banner = '<div class="notice" style="margin-bottom:26px"><span aria-hidden>◈</span><span>'+
-    p("回饋分兩層：<b>規則回饋</b>是確定性的——同一組概念命中就給同一段預寫文字，所以會重複；<b>AI 個別化回饋</b>由 Claude 讀你實際寫的內容生成，每次都不同，使用你自己的 Claude 額度，第一次會徵詢同意。學習紀錄只存在你的瀏覽器。",
-      "Feedback comes in two layers. <b>Rule-based feedback</b> is deterministic — the same matched concepts always yield the same pre-written text, so it repeats. <b>AI feedback</b> is written by Claude from what you actually wrote, different every time; it uses your own Claude usage and asks consent on the first call. Your record stays in your browser.")+
+    p("回饋分兩層：<b>規則回饋</b>是確定性的——同一組概念命中就給同一段預寫文字，所以會重複，且永遠免費可用；<b>AI 個別化回饋</b>讀你實際寫的內容生成，每次都不同，需先在「AI 設定」接上模型。學習紀錄只存在你自己的瀏覽器，不會上傳。",
+      "Feedback comes in two layers. <b>Rule-based feedback</b> is deterministic — the same matched concepts always yield the same pre-written text, so it repeats; it always works and costs nothing. <b>AI feedback</b> is written from what you actually wrote, different every time, once a model is connected in AI settings. Your record stays in your own browser and is never uploaded.")+
     '</span></div>';
 
   v.className = wide ? "wrap-wide" : "wrap";
@@ -922,6 +1030,16 @@ function render(){
 }
 
 /* ── events ─────────────────────────────── */
+document.addEventListener("change", e => {
+  if(e.target && e.target.id === "ai-mode"){
+    const m = e.target.value;
+    const show = (id, on) => { const el = document.getElementById(id); if(el) el.style.display = on ? "" : "none"; };
+    show("ai-key-box",   m === "key");
+    show("ai-proxy-box", m === "proxy");
+    show("ai-model-box", m !== "off");
+  }
+});
+
 document.addEventListener("click", e => {
   const roleB = e.target.closest("[data-role]");
   if(roleB){ S.role = roleB.dataset.role;
@@ -963,6 +1081,9 @@ document.addEventListener("click", e => {
     save(); render(); return;
   }
 
+  if(e.target.closest("#aiSave")){ saveAiCfg(); return; }
+  if(e.target.closest("#aiTest")){ testAiCfg(); return; }
+
   if(e.target.closest("#kbExport")){ exportKB(); return; }
   if(e.target.closest("#kbImport")){ importKB(); return; }
 
@@ -977,7 +1098,7 @@ document.addEventListener("click", e => {
     const rid = "r"+Date.now();
     S.responses.push({ id:rid, questionId:id, text, lang:S.lang, at:Date.now(), fb:analyze(text, q.rubric) });
     save(); render();
-    if(sampleFn) runAI(rid);          // individualized feedback right after the deterministic pass
+    if(aiReady()) runAI(rid);         // individualized feedback right after the deterministic pass
     return;
   }
 
@@ -998,7 +1119,35 @@ document.addEventListener("click", e => {
   if(e.target.closest("#langBtn")){ S.lang = S.lang==="zh" ? "en" : "zh"; save(); render(); return; }
 });
 
-/* ── CSV / knowledge-pack export via the downloads capability ── */
+/* ── AI settings ─────────────────────────── */
+function readAiForm(){
+  const g = id => { const el = document.getElementById(id); return el ? el.value.trim() : ""; };
+  return {
+    mode: g("ai-mode") || "off",
+    key: g("ai-key"),
+    endpoint: g("ai-endpoint"),
+    model: g("ai-model") || DEFAULT_MODEL
+  };
+}
+function saveAiCfg(){
+  S.ai = readAiForm(); save();
+  const m = document.getElementById("aiMsg");
+  if(m){ m.textContent = "✓ " + t("cfgSaved"); m.style.color = "var(--accent-deep)"; }
+}
+async function testAiCfg(){
+  S.ai = readAiForm(); save();
+  const m = document.getElementById("aiMsg");
+  if(!aiReady()){ m.textContent = aiCopy("unconfigured"); m.style.color = "var(--amber)"; return; }
+  m.textContent = "…"; m.style.color = "var(--ink-faint)";
+  try{
+    await aiJson('Reply with only this JSON: {"ok":true}');
+    m.textContent = "✓ " + t("cfgOk"); m.style.color = "var(--accent-deep)";
+  }catch(err){
+    m.textContent = aiCopy(err && err.code); m.style.color = "var(--amber)";
+  }
+}
+
+/* ── CSV / knowledge-pack export ─────────── */
 function csvText(){
   const head = ["chapter_order","chapter","question_order","question","answered_at","lang","answer","concepts_hit","concepts_missing","misconception_flags","score"];
   const q = s => '"'+String(s==null?"":s).replace(/"/g,'""')+'"';
@@ -1012,16 +1161,19 @@ function csvText(){
   return "\uFEFF" + lines.join("\r\n");
 }
 
-async function offerFile(btnId, filename, data, emptyMsg){
+function offerFile(btnId, filename, data, emptyMsg){
   const btn = document.getElementById(btnId);
   if(emptyMsg){ btn.textContent = emptyMsg; setTimeout(()=>render(),1800); return; }
-  if(!downloadsFn){ btn.textContent = p("此環境無法下載檔案","Downloads unavailable here"); setTimeout(()=>render(),2200); return; }
   try{
-    await downloadsFn.save({ filename, data });
+    const blob = new Blob([data], {type: filename.endsWith(".csv") ? "text/csv;charset=utf-8" : "application/json;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
     btn.textContent = "✓ " + p("已下載","Saved"); setTimeout(()=>render(),1800);
   }catch(err){
-    btn.textContent = err && err.code === "declined" ? p("已取消","Cancelled") : p("下載失敗","Export failed");
-    setTimeout(()=>render(),2000);
+    btn.textContent = p("下載失敗","Export failed"); setTimeout(()=>render(),2000);
   }
 }
 
@@ -1061,3 +1213,5 @@ function importKB(){
 
 render();
 </script>
+</body>
+</html>
