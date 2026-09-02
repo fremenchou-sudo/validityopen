@@ -1,0 +1,1063 @@
+<title>效度新視界 Validity Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap">
+
+<style>
+:root{
+  --paper:#FAF8F4; --card:#FFFFFF; --card-2:#F4F1EA00;
+  --ink:#2B2A26; --ink-soft:#57554E; --ink-faint:#8A877D;
+  --line:#E7E3DA; --line-soft:#F0EDE6;
+  --accent:#0E6E66; --accent-deep:#0A4F4A; --accent-soft:#E4F0EE;
+  --amber:#A8672B; --amber-soft:#F6EDE2;
+  --plum:#6D5A7E; --plum-soft:#EFEAF3;
+  --viz-teal:#079484; --viz-orange:#C96A15; --viz-purple:#8A5BB8;
+  --shadow:0 1px 2px rgba(43,42,38,.04), 0 4px 16px rgba(43,42,38,.06);
+  --shadow-lift:0 2px 4px rgba(43,42,38,.05), 0 10px 30px rgba(43,42,38,.09);
+  --display:"Newsreader","Noto Serif TC","Songti TC",Georgia,serif;
+  --body:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#161917; --card:#1E211F;
+    --ink:#EDEAE3; --ink-soft:#BFBBB1; --ink-faint:#8B877D;
+    --line:#2E322F; --line-soft:#242826;
+    --accent:#5CC3B4; --accent-deep:#8ADACD; --accent-soft:#17322E;
+    --amber:#D9955C; --amber-soft:#33261B;
+    --plum:#B9A3CC; --plum-soft:#2A2434;
+    --viz-teal:#35BCA9; --viz-orange:#E08B3F; --viz-purple:#A783D8;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.28);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.32), 0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#161917; --card:#1E211F;
+  --ink:#EDEAE3; --ink-soft:#BFBBB1; --ink-faint:#8B877D;
+  --line:#2E322F; --line-soft:#242826;
+  --accent:#5CC3B4; --accent-deep:#8ADACD; --accent-soft:#17322E;
+  --amber:#D9955C; --amber-soft:#33261B;
+  --plum:#B9A3CC; --plum-soft:#2A2434;
+  --viz-teal:#35BCA9; --viz-orange:#E08B3F; --viz-purple:#A783D8;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.28);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.32), 0 10px 30px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--display); text-wrap:balance; margin:0; font-weight:600; line-height:1.3}
+a{color:inherit}
+button{font:inherit; color:inherit; cursor:pointer; border:none; background:none}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ── chrome ─────────────────────────────── */
+.top{
+  position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+}
+.top-in{display:flex; align-items:center; gap:14px; padding:11px 18px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:10px; margin-right:auto; min-width:0}
+.mark{
+  width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff;
+  display:grid; place-items:center; font-family:var(--display); font-weight:600; font-size:19px; flex:none;
+}
+.brand-t{font-family:var(--display); font-weight:600; font-size:17px; line-height:1.25}
+.brand-s{font-size:11px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase; line-height:1.3}
+
+.seg{display:flex; gap:2px; padding:3px; background:var(--line-soft); border:1px solid var(--line); border-radius:999px}
+.seg button{
+  padding:5px 13px; border-radius:999px; font-size:13.5px; color:var(--ink-soft); white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.seg button[aria-pressed="true"]{background:var(--card); color:var(--accent-deep); font-weight:600; box-shadow:var(--shadow)}
+
+.mini{
+  padding:5px 12px; border:1px solid var(--line); border-radius:999px; font-size:13px;
+  color:var(--ink-soft); background:var(--card); transition:border-color .15s, color .15s;
+}
+.mini:hover{border-color:var(--accent); color:var(--accent-deep)}
+
+.body{display:flex; align-items:flex-start}
+.rail{
+  width:214px; flex:none; border-right:1px solid var(--line); padding:16px 12px;
+  position:sticky; top:58px; align-self:flex-start;
+}
+.rail a{
+  display:flex; align-items:center; gap:11px; padding:9px 13px; border-radius:11px;
+  font-size:15px; color:var(--ink-soft); text-decoration:none; transition:background .15s, color .15s;
+}
+.rail a:hover{background:var(--line-soft)}
+.rail a.on{background:var(--accent-soft); color:var(--accent-deep); font-weight:600}
+.rail .ico{width:19px; text-align:center; flex:none; opacity:.9}
+.railtitle{font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-faint); padding:8px 13px 5px}
+.main{flex:1; min-width:0; padding:30px 26px 70px}
+.wrap{max-width:760px; margin:0 auto}
+.wrap-wide{max-width:1020px; margin:0 auto}
+@media (max-width:900px){
+  .rail{display:none}
+  .main{padding:22px 16px 60px}
+  .railm{display:flex; gap:7px; overflow-x:auto; padding:9px 16px; border-bottom:1px solid var(--line); scrollbar-width:none}
+  .railm::-webkit-scrollbar{display:none}
+  .railm a{
+    padding:6px 13px; border:1px solid var(--line); border-radius:999px; font-size:13.5px;
+    color:var(--ink-soft); text-decoration:none; white-space:nowrap; background:var(--card);
+  }
+  .railm a.on{background:var(--accent-soft); color:var(--accent-deep); border-color:transparent; font-weight:600}
+}
+@media (min-width:901px){ .railm{display:none} }
+
+/* ── primitives ─────────────────────────── */
+.card{background:var(--card); border:1px solid var(--line); border-radius:17px; box-shadow:var(--shadow)}
+.btn{
+  display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:999px;
+  font-size:15px; font-weight:500; background:var(--accent); color:#fff; transition:filter .15s, transform .1s;
+}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:scale(.98)}
+.btn-o{background:transparent; color:var(--accent-deep); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent)}
+.btn-o:hover{background:var(--accent-soft); filter:none}
+.btn-q{background:transparent; color:var(--ink-soft); border:1px solid var(--line)}
+.btn-q:hover{background:var(--line-soft); filter:none}
+.chip{display:inline-flex; align-items:center; gap:5px; padding:3px 11px; border-radius:999px; font-size:12.5px; font-weight:500}
+.c-acc{background:var(--accent-soft); color:var(--accent-deep)}
+.c-amb{background:var(--amber-soft); color:var(--amber)}
+.c-plum{background:var(--plum-soft); color:var(--plum)}
+.c-nil{background:var(--line-soft); color:var(--ink-faint)}
+textarea,input,select{
+  width:100%; font:inherit; font-size:15.5px; padding:11px 14px; border-radius:12px;
+  border:1px solid var(--line); background:var(--card); color:var(--ink); transition:border-color .15s, box-shadow .15s;
+}
+textarea:focus,input:focus,select:focus{
+  outline:none; border-color:color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+textarea{min-height:118px; resize:vertical; line-height:1.75}
+.lbl{display:block; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:6px}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── notice ─────────────────────────────── */
+.notice{
+  display:flex; gap:11px; align-items:flex-start; padding:13px 17px; border-radius:13px;
+  background:var(--plum-soft); border:1px solid color-mix(in srgb, var(--plum) 26%, transparent);
+  font-size:14px; color:var(--ink-soft); line-height:1.7;
+}
+.notice b{color:var(--ink)}
+
+/* ── content blocks ─────────────────────── */
+.ct h2{font-size:22px; margin:38px 0 12px}
+.ct h2:first-child{margin-top:0}
+.ct p{margin:0 0 16px; color:var(--ink-soft)}
+.ct .q{
+  margin:22px 0; padding:15px 21px; border-left:3px solid color-mix(in srgb, var(--accent) 65%, transparent);
+  background:color-mix(in srgb, var(--accent-soft) 62%, transparent);
+  border-radius:0 13px 13px 0; font-family:var(--display); font-style:italic; font-size:18px; color:var(--ink);
+}
+.ct .key{
+  margin:22px 0; padding:16px 21px; border-radius:13px; background:var(--amber-soft);
+  border:1px solid color-mix(in srgb, var(--amber) 22%, transparent); color:var(--ink); font-weight:500;
+}
+.ct .cap{font-size:13.5px; color:var(--ink-faint); margin:26px 0 8px; line-height:1.65}
+.ct ul{list-style:none; padding:0; margin:0 0 20px; display:flex; flex-direction:column; gap:10px}
+.ct li{position:relative; padding-left:23px; color:var(--ink-soft)}
+.ct li::before{
+  content:""; position:absolute; left:5px; top:.72em; width:6px; height:6px;
+  border-radius:50%; background:color-mix(in srgb, var(--accent) 75%, transparent);
+}
+.ct strong{color:var(--ink); font-weight:600}
+
+/* ── meters ─────────────────────────────── */
+.meter{padding:7px 0}
+.meter-h{display:flex; justify-content:space-between; align-items:baseline; gap:14px; margin-bottom:5px}
+.meter-l{font-size:14px; color:var(--ink-soft); min-width:0}
+.meter-v{font-size:13.5px; font-weight:600; color:var(--ink); flex:none; font-variant-numeric:tabular-nums}
+.meter-t{height:10px; border-radius:999px; background:var(--line-soft); overflow:hidden}
+.meter-f{height:100%; border-radius:0 4px 4px 0; transition:width .4s ease}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:15px}
+.tile{padding:18px 20px}
+.tile-n{font-family:var(--display); font-size:31px; font-weight:600; line-height:1.15; font-variant-numeric:tabular-nums}
+.tile-l{font-size:13.5px; color:var(--ink-faint); margin-top:2px}
+
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(288px,1fr)); gap:17px}
+.rowlist > *{border-top:1px solid var(--line)}
+.rowlist > *:first-child{border-top:none}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:14px}
+th,td{text-align:left; padding:9px 13px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); font-weight:600; white-space:nowrap}
+
+.fb{margin-top:14px; display:flex; flex-direction:column; gap:11px}
+.fb-b{padding:14px 17px; border-radius:13px; font-size:14.5px; line-height:1.75}
+.fb-hit{background:color-mix(in srgb, var(--accent-soft) 70%, transparent); border:1px solid color-mix(in srgb, var(--accent) 24%, transparent)}
+.fb-flag{background:var(--amber-soft); border:1px solid color-mix(in srgb, var(--amber) 26%, transparent)}
+.fb-gap{background:var(--line-soft); border:1px solid var(--line)}
+.fb-t{font-size:13px; font-weight:700; margin-bottom:7px; letter-spacing:.02em}
+.fb ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px}
+.fb li{color:var(--ink-soft)}
+.fb li b{color:var(--ink)}
+
+.ans{
+  padding:13px 17px; border-radius:13px; background:var(--line-soft); border:1px solid var(--line);
+  font-size:14.5px; color:var(--ink-soft); white-space:pre-wrap; line-height:1.75;
+}
+.stack{display:flex; flex-direction:column}
+.hr{height:1px; background:var(--line); border:none; margin:0}
+.muted{color:var(--ink-faint); font-size:13.5px}
+.twoshift{margin-top:26px; padding:22px 24px; display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:center}
+@media (max-width:560px){ .twoshift{grid-template-columns:1fr; gap:14px} }
+</style>
+
+<div class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="mark">V</span>
+      <span>
+        <span class="brand-t" id="brandT">效度新視界</span><br>
+        <span class="brand-s">AMEE 2026 Symposium</span>
+      </span>
+    </div>
+    <div class="seg" id="roleSeg" role="group" aria-label="視角"></div>
+    <button class="mini" id="langBtn">EN</button>
+  </div>
+</div>
+<nav class="railm" id="railm"></nav>
+<div class="body">
+  <aside class="rail" id="rail"></aside>
+  <main class="main"><div id="view"></div></main>
+</div>
+
+<script>
+const DATA = [{"slug":"questions","order":1,"speaker":"Claire Touchie","minutes":8,"titleZh":"開場：我們從哪些問題出發？","titleEn":"Where We Started: The Questions","summaryZh":"Programmatic assessment 以多次低利害評量支持成長，卻同時被用於高利害的晉升與授證決策。當 WBA 不再標準化，傳統效度概念便出現張力。","summaryEn":"Programmatic assessment supports growth through many low-stakes assessments, yet its data also feed high-stakes progression decisions. When WBAs are unstandardized, classical validity concepts come under strain.","contentZh":"## 為什麼要重新思考效度？\n\nProgrammatic assessment（計畫性評量）的初衷，是透過大量低利害評量（低利害評量, low-stakes assessment）與回饋，支持學習者作為健康專業人員的成長。然而在實務上，這些資料同時被用於高利害評量（high-stakes assessment）的晉升與授證決策。\n\nWorkplace-based assessment（WBA，職場評量）是計畫性評量的主要評量形式：真實情境、直接觀察——也因此**不可能標準化**。不同的病人、情境與評量者，讓我們沿用已久的效度概念面臨挑戰。\n\n## 本課程貫穿的四個問題\n\n- 當評量無法標準化、學習者之間幾乎沒有可測量的變異時，我們如何知道評量是可信（reliable）的？\n- 一個「有效的評量工具」等於一個「有效的評量系統（program of assessment）」嗎？\n- 如果評量不標準化，「所有學習者都應被公平評量」究竟是什麼意思？\n- 若計畫性評量的資料主要是形成性（低利害）用途，我們如何據以做出可辯護的總結性晉升或授證決策？\n\n!! 每一章都會回到同一個核心：Purpose——評量的目的決定我們需要什麼樣的效度證據。\n\n?? 資料來源：AMEE 2026 Symposium 投稿文件與投影片（Touchie et al.）","contentEn":"## Why rethink validity?\n\nProgrammatic assessment (PA) is largely designed to provide many low-stakes assessments with feedback, supporting learners' growth as health professionals. In practice, however, PA data are also used for high-stakes decisions about progression and credentialling.\n\nWorkplace-based assessments (WBAs) are intended to be the predominant form of assessment in a PA approach. They are authentic and directly observed in real workplace settings — which means they are **not standardized**: different patients, contexts, and assessors. This presents real challenges to our traditional conceptualization of validity.\n\n## Four questions that run through this course\n\n- How do we know our assessments are reliable when there is no standardization and little or no measurable variance between trainees?\n- Does a valid assessment tool equal a valid program of assessment?\n- What do we mean by assessing all trainees \"equitably\" if the assessments are not standardized?\n- If PA data merely have a formative (low-stakes) purpose, how can we arrive at defensible summative decisions for advancement or credentialing?\n\n!! Every chapter returns to the same anchor: Purpose — the purpose of assessment determines what validity evidence we need.\n\n?? Source: AMEE 2026 Symposium submission and slides (Touchie et al.)","questions":[{"id":"questions-q1","order":1,"promptZh":"在你自己的教學或臨床評量經驗中，是否遇過「為成長而設計的評量資料，被拿來做高利害決策」的情況？請描述那個情境，以及你觀察到什麼張力。","promptEn":"In your own teaching or clinical assessment experience, have you seen data designed for growth being used for high-stakes decisions? Describe the situation and the tensions you observed.","hintZh":"想想：形成性 vs 總結性、低利害 vs 高利害、學習者知道資料會被怎麼用嗎？","hintEn":"Think: formative vs summative, low- vs high-stakes, did learners know how the data would be used?","rubric":{"concepts":[{"key":"purpose","labelZh":"評量目的（Purpose）","labelEn":"Purpose of assessment","keywords":["目的","purpose","為了","用途","formative","summative","形成性","總結性"],"hitZh":"你有注意到評量目的這個核心——效度證據必須回應評量的目的，這正是本課程的主軸。","hitEn":"You anchored on purpose — validity evidence must speak to the purpose of assessment, which is the thread of this whole course.","missZh":"試著把情境再往「目的」推一層：這個評量原本是為了什麼而設計？被挪用時目的改變了嗎？效度證據必須回應目的。","missEn":"Push one layer deeper into purpose: what was this assessment designed for, and did repurposing change that? Validity evidence must speak to purpose."},{"key":"stakes","labelZh":"利害程度（Stakes）","labelEn":"Stakes","keywords":["低利害","高利害","stakes","low-stakes","high-stakes","晉升","授證","決策","promotion","credential"],"hitZh":"你辨識出利害程度的轉換——這正是計畫性評量最脆弱的接縫：資料的利害是由「用途」而非「工具」決定的。","hitEn":"You identified the shift in stakes — the most fragile seam of programmatic assessment: stakes are set by use, not by the instrument.","missZh":"可以進一步區分「低利害評量」與「高利害評量」：同一筆資料，用於回饋是低利害，用於晉升就是高利害。利害是用途的屬性。","missEn":"Distinguish low-stakes from high-stakes use: the same data point is low-stakes as feedback and high-stakes in a promotion decision. Stakes are a property of use."},{"key":"learner-awareness","labelZh":"學習者的覺察與行為改變","labelEn":"Learner awareness & behaviour","keywords":["學習者","住院醫師","learner","resident","隱藏","揭露","安全","safe","disclosure","信任","trust"],"hitZh":"你觸及了學習者端的反應——當學習者感知資料可能被高利害使用，揭露行為會改變，證據流本身就被形塑了（第三章會深入）。","hitEn":"You touched the learner side — when learners perceive high-stakes use, disclosure changes and the evidence stream itself is shaped (Chapter 3 goes deeper).","missZh":"再想一步：學習者若知道這些資料會影響晉升，他們展現與揭露的內容會改變嗎？這會回頭影響證據本身的效度。","missEn":"One more step: if learners know the data affect promotion, will what they show and disclose change? That loops back into the validity of the evidence itself."}],"misconceptions":[{"key":"tool-fix","labelZh":"以為換更好的工具就能解決","labelEn":"Better tool will fix it","patterns":["換工具","更好的量表","better tool","better instrument","改表單","新量表"],"clarifyZh":"小心「工具主義」：張力不在工具品質，而在同一資料流承載了兩種目的。有效的工具不等於有效的評量系統。","clarifyEn":"Beware instrumentalism: the tension is not tool quality but one data stream carrying two purposes. A valid tool does not equal a valid program."}]}},{"id":"questions-q2","order":2,"promptZh":"四個開場問題中，哪一個最切中你所屬機構目前的痛點？為什麼？如果要向你的同事解釋這個張力，你會怎麼說？","promptEn":"Which of the four opening questions best captures your institution's current pain point, and why? How would you explain this tension to a colleague?","hintZh":"選一個問題，連結到你機構的具體制度（如 EPA、里程碑、CCC）。","hintEn":"Pick one question and link it to a concrete structure at your institution (EPAs, milestones, CCC).","rubric":{"concepts":[{"key":"context-link","labelZh":"連結自身機構脈絡","labelEn":"Link to own context","keywords":["我們","本院","機構","科部","住院醫師","our program","my institution","epa","milestone","里程碑","ccc","clinical competency committee"],"hitZh":"你把抽象張力落到具體制度脈絡——這正是 implementation 的起點：效度問題永遠是「在某個系統中」的問題。","hitEn":"You grounded the abstract tension in a concrete institutional context — validity questions are always questions *within a system*.","missZh":"試著把這個張力連到你機構的具體制度（EPA 簽核、CCC 決策、UGY/PGY 評核表），張力才會從理論變成可處理的設計問題。","missEn":"Try tying the tension to a concrete structure (EPA sign-offs, CCC decisions, evaluation forms) — that turns theory into a designable problem."},{"key":"articulation","labelZh":"能向同儕闡述張力","labelEn":"Articulating the tension","keywords":["因為","所以","張力","tension","衝突","兩難","trade-off","一方面"],"hitZh":"你能把張力用自己的話說清楚——「講得出來」是師資培育中概念內化的重要指標。","hitEn":"You can articulate the tension in your own words — a strong marker of conceptual internalization in faculty development.","missZh":"試著用「一方面⋯另一方面⋯」的句式把張力的兩端都說出來，這能檢驗自己是否真的看見兩難，而非只看見單邊問題。","missEn":"Try an 'on one hand… on the other…' framing to voice both poles — it tests whether you see a genuine dilemma or only one side."}],"misconceptions":[]}}]},{"slug":"lenses","order":2,"speaker":"Olle ten Cate","minutes":12,"titleZh":"效度是什麼？多重視角","titleEn":"What Do We Mean by Validity? Multiple Lenses","summaryZh":"效度是「表徵」與「被表徵之物」的關係。醫學能力可分為 canonical、contextual、personalized 三層，每一層對應不同的效度視角、不同的決策與不同的利害關係人。","summaryEn":"Validity concerns the relation between a representation and what it represents. Medical competence can be seen in three layers — canonical, contextual, personalized — each implying a different validity lens, decision, and stakeholder.","contentZh":"## 從一個誠實的調查說起\n\n> 「你是否曾經在不完全確信學習者已達到關鍵目標的情況下，簽署了課程或訓練的完成證明？」——25 場工作坊、837 位與會者的即時投票中，多數人回答「是」。\n\n這本身就是一個效度視角：我們的**決策**（簽核、授證）與我們對能力的**認識**之間，存在落差。\n\n## 效度的基本構造\n\n字典上的 valid：「有根據的、健全的、真實的」。效度涉及兩個構件：**表徵（representation）**與**被表徵的對象（object represented）**——例如測驗分數意圖表徵學生的知識。表徵越貼近真實，效度越高。\n\n## 醫學能力的三層構造\n\n- **Canonical competence（典律能力）**：去情境的知識與技能——「標準答案」層。\n- **Contextual competence（情境能力）**：在多變情境中應用與調適的能力。\n- **Personalized competence（個人化能力）**：個人特質融入照護的藝術——每位醫師獨特的實踐風格。\n\n## 三種視角，三種效度定義\n\n- Canonical 視角：效度＝測驗分數反映學習者典律知識技能的程度。決策理據：學生晉級。利害在**學生**。\n- Contextual 視角：效度＝「將病人照護任務託付（entrust）給學習者」這個決定的正當性。決策理據：照護品質與安全。利害在**病人與學生**。\n- Personalized 視角：效度＝外部品質訊號能否促成個人成長與實踐調整。利害在**個人風格與品質**。\n\n!! 用 Kane 的推論鏈（scoring → generalization → extrapolation → implications）可以為「評量到 entrustment」建立效度論證——但每一層視角下，推論鏈的關鍵環節不同。\n\n## 留給你的問題\n\n- 我們對能力（一個潛在構念）認識的「準確性」有多重要？\n- 我們是否應該更關注**決策**（信任學習者投入照護）的效度，而非分數的效度？\n- 對學習者的文憑重要，還是對病人照護自主權的決定重要？\n- WBA 的利害程度（stakes）究竟該如何界定？\n\n?? ten Cate O, et al. Medical competence as a multilayered construct. Med Educ 2024.","contentEn":"## Start from an honest poll\n\n> \"Have you ever personally signed off for completion of a program or rotation while not fully confident that the learner had met critical objectives?\" — Across 25 polls and 837 participants, most answered yes.\n\nThat is itself a validity lens: there is a gap between our **decisions** (sign-offs, credentials) and our **knowledge** of competence.\n\n## The basic structure of validity\n\nDictionary \"valid\": well-grounded, sound, true. Validity employs two constructs: a **representation** and the **object represented** — e.g., a test score intends to represent a student's knowledge. The better the representation, the more valid the score interpretation.\n\n## Medical competence as a three-layer construct\n\n- **Canonical competence**: context-independent knowledge and skill — the \"textbook\" layer.\n- **Contextual competence**: application and adaptation to contextual diversity.\n- **Personalized competence**: individuality and the art of patient care — each clinician's unique style.\n\n## Three lenses, three definitions of validity\n\n- Canonical lens: validity = the extent to which a test score reflects canonical knowledge and skills. Rationale: student progress decisions. Stakes fall on **students**.\n- Contextual lens: validity = the extent to which **entrustment** with patient care tasks is justified. Rationale: quality and safety of care. Stakes fall on **patients and students**.\n- Personalized lens: validity = the extent to which outside signals of quality lead to personal development. Stakes concern **personal style and quality**.\n\n!! Kane's chain of inferences (scoring → generalization → extrapolation → implications) can build a validity argument from assessment to entrustment — but the critical link differs under each lens.\n\n## Questions to sit with\n\n- How important is the accuracy of our knowledge about a learner's competence (a latent construct)?\n- Should we focus more on the validity of our decisions — our *trust* — to let the trainee work in patient care?\n- Which matters more: the diploma for the learner, or the decision for autonomy in patient care?\n- How should we define the stakes of workplace-based assessment?\n\n?? ten Cate O, et al. Medical competence as a multilayered construct. Med Educ 2024.","questions":[{"id":"lenses-q1","order":1,"promptZh":"請用你熟悉的一個評量（例如 OSCE、mini-CEX、EPA 簽核）為例，分析它主要落在哪一層能力視角（canonical / contextual / personalized）？用這個視角看，它的效度定義是什麼？利害落在誰身上？","promptEn":"Take one assessment you know well (e.g., OSCE, mini-CEX, EPA sign-off). Which competence lens does it mainly address — canonical, contextual, or personalized? Under that lens, what is its validity definition, and on whom do the stakes fall?","hintZh":"同一工具可能跨層；關鍵是「這個分數／決定意圖表徵什麼」。","hintEn":"One tool can span layers; the key is what the score or decision intends to represent.","rubric":{"concepts":[{"key":"layer-id","labelZh":"正確辨識能力層次","labelEn":"Identifying the competence layer","keywords":["canonical","contextual","personalized","典律","情境","個人化","層"],"hitZh":"你能將具體工具對應到能力層次——這是把 multilayered construct 從概念變成分析工具的關鍵一步。","hitEn":"You mapped a concrete tool onto a competence layer — the key move that turns the multilayered construct into an analytic tool.","missZh":"試著明確指出你的例子主要表徵哪一層：OSCE 偏 canonical（標準化情境下的知識技能），EPA 簽核偏 contextual（真實情境的託付決定）。","missEn":"Name the layer explicitly: OSCEs lean canonical (knowledge/skill under standardized conditions); EPA sign-offs lean contextual (entrustment in authentic settings)."},{"key":"representation","labelZh":"表徵與被表徵物的關係","labelEn":"Representation vs object","keywords":["表徵","represent","反映","reflect","意圖","intend","構念","construct","分數代表"],"hitZh":"你抓住了效度的核心構造：分數／決定是「表徵」，能力是「被表徵物」，效度就是兩者的貼近程度。","hitEn":"You captured validity's core structure: the score/decision is a representation, competence the object — validity is the fit between them.","missZh":"回到效度的基本構造想一次：這個分數（或簽核）意圖「表徵」什麼？效度＝表徵與被表徵物的貼近程度。","missEn":"Revisit the basic structure: what does this score (or sign-off) intend to *represent*? Validity is the fit between representation and object."},{"key":"stakes-holder","labelZh":"利害關係人分析","labelEn":"Stakeholder of the stakes","keywords":["病人","patient","學生","student","學習者","利害","stakes","安全","safety"],"hitZh":"你點出利害落在誰身上——contextual 視角最大的轉向就是把病人帶進效度論證。","hitEn":"You named who bears the stakes — the contextual lens's biggest turn is bringing patients into the validity argument.","missZh":"補上一問：這個評量若失準，後果落在誰身上？學生（晉級）？病人（安全）？還是學習者的自我發展？","missEn":"Add one question: if this assessment misfires, who bears the consequence — the student (progress), the patient (safety), or the learner's development?"}],"misconceptions":[{"key":"validity-property","labelZh":"把效度當工具的固有屬性","labelEn":"Validity as a property of the tool","patterns":["這個工具有效度","工具的效度","the tool is valid","validated tool","已驗證工具","信效度良好"],"clarifyZh":"當代效度理論的共識：效度不是工具的固有屬性，而是「分數詮釋與使用」的屬性。同一工具換一個目的，效度論證要重新建立。","clarifyEn":"Modern consensus: validity is not a property of an instrument but of score *interpretation and use*. Change the purpose, and the validity argument must be rebuilt."}]}},{"id":"lenses-q2","order":2,"promptZh":"Olle 問：「哪個更重要——學習者拿到的文憑，還是讓他自主照護病人的決定？」你的立場是什麼？這個立場對你們機構的評量設計會有什麼具體含意？","promptEn":"Olle asks: which is more important — the learner's diploma, or the decision to grant autonomy in patient care? Where do you stand, and what would your position concretely imply for assessment design at your institution?","hintZh":"沒有標準答案；重點是立場與設計含意之間的一致性。","hintEn":"No right answer; what matters is coherence between your position and its design implications.","rubric":{"concepts":[{"key":"entrustment","labelZh":"託付（entrustment）作為決策效度","labelEn":"Entrustment as decision validity","keywords":["託付","entrust","信任","trust","自主","autonomy","supervision","督導"],"hitZh":"你把焦點從「分數準確性」移到「託付決策的正當性」——這是 contextual 視角下效度的重新定義。","hitEn":"You shifted focus from score accuracy to the justification of entrustment decisions — validity redefined under the contextual lens.","missZh":"試著用 entrustment 的語言重寫你的答案：我們真正做的決定是「敢不敢把病人交給他」，效度的對象是這個決定。","missEn":"Rewrite in entrustment language: the real decision is whether to hand a patient over — validity attaches to *that* decision."},{"key":"design-implication","labelZh":"推導出具體設計含意","labelEn":"Concrete design implications","keywords":["設計","design","應該","調整","改變","would","imply","制度","配套"],"hitZh":"你讓立場落地為設計含意——立場與制度設計的一致性，正是效度論證中 implications 環節的實作。","hitEn":"You landed the position in design implications — coherence between stance and system design is the 'implications' link of a validity argument in action.","missZh":"再往前一步：如果你選「照護自主的決定」更重要，你的評量系統該多收什麼證據、少依賴什麼？立場需要制度後果。","missEn":"One step further: if the care-autonomy decision matters more, what evidence should your system collect more of, and rely less on? A stance needs institutional consequences."}],"misconceptions":[]}}]},{"slug":"ctt-wba","order":3,"speaker":"Fremen Chihchen Chou","minutes":15,"titleZh":"為什麼古典測驗理論不適用於 WBA 時代？","titleEn":"Why Doesn't Classical Test Theory Fit the WBA Era?","summaryZh":"CTT 問「分數能否可重現地區辨學習者」；WBA 問「這位學習者在此情境下需要什麼」。更深一層：學習者活在評量系統裡，評量系統參與生產了它之後要詮釋的證據。","summaryEn":"CTT asks whether a score can distinguish learners reproducibly; WBA asks what this learner needs next, in this context. Deeper still: the learner is alive inside the system, and the assessment system co-produces the very evidence it later interprets.","contentZh":"## 同一位住院醫師，兩個班，兩位主治\n\n> 星期一：Level 2，需直接督導。星期四：Level 4，可獨立執業（保留監督）。同一個人、同一週——**哪一個是測量誤差？**\n\n先把這個問題放在心裡。\n\n## CTT 與 WBA 問的是不同問題\n\n- **CTT 問**：這個分數能不能**可重現地區辨**學習者？——差異化／再現性的問題。\n- **WBA 問**：這位學習者**接下來需要什麼**——在這個場域、這些病人、這些條件下？——發展性／教練式的問題。\n\n!! 不同的問題 → 需要不同的證據。\n\n## 變異就是臨床工作的本體\n\n一次觀察背後，站著：病人與急重症程度、工作量與壅塞、當天的團隊、督導者的狀態、學習者的狀態、當班的學習機會。\n\n> 這不是職場的失敗——這**就是**職場。\n\n問題不在「情境是不是誤差」，而在「**哪些情境變異對哪個目的重要**」：有些是無關誤差，有些可能是偏誤，但有些正是我們想看到的**調適能力**。\n\n## 信度問題是真的——但它從下游開始\n\n以 G 理論分析 entrustment-derived WBA：**評分者佔 37% 變異，住院醫師本人僅佔 19%**（Kelleher 2020）。這是重要訊息。但這種分析是在觀察「進入資料庫之後」才開始的——WBA 還要問：**這些觀察一開始是怎麼變成證據的？**\n\n## 學習者活在評量系統裡\n\n學習者不是被動接受評量，他們會**詮釋**：這是做什麼用的？可信嗎？安全嗎——是幫助，還是日後的標籤？然後參與行為改變：尋求或迴避、展現或保護。\n\n> 「我都挑那天表現最好的項目送出。」——策略性取樣，發生在任何統計之前。\n> 「就算分數低也值得，因為那次回饋太扎實了。」——可信的教練關係讓揭露變得可負擔。\n\n## 評量系統共同生產它的證據\n\n系統設計與感知利害 → 學習者詮釋（目的・可信度・風險）→ 參與及紀錄行為 → 系統回應 → 委員會決策。Portfolio 一部分是能力的紀錄，一部分是**系統如何形塑揭露**的痕跡。\n\n## 效度必須涵蓋證據生成的條件\n\n- 繼續要求：purposeful sampling、專家判斷、敘事證據、委員會統整。\n- 同時檢視：感知利害、關係可信度、受保護的觀察、階段對位、紀錄負擔、**系統回應性**。\n\n!! 不平等的安全感與機會 → 不平等的真實紀錄管道：這是證據流內部的公平威脅（下一章接手）。\n\n## 三個問題，一條軸線\n\n- CTT 問：分數能否可重現地區辨學習者？\n- WBA 問：這位學習者在此情境下需要什麼？\n- PA 問：系統能否把眾多觀察轉化為**可辯護的決策**？\n\n——都要加上同一句話：**為了這個目的、為了這些學習者、在這個情境中。**\n\n?? Chu Y-J, Sie Y-D, Chou FC. Mechanisms of learner engagement in CBME. Med Teach 2026；Kelleher M, et al. Acad Med 2020；Govaerts & van der Vleuten 2013。","contentEn":"## Same resident. Two shifts. Two supervisors.\n\n> Monday: Level 2 — direct supervision required. Thursday: Level 4 — unsupervised practice with oversight. Same person, same week. **Which one was the measurement error?**\n\nHold that question.\n\n## CTT and WBA ask different questions\n\n- **CTT asks**: can this score distinguish learners — **reproducibly**? A differentiation/reproducibility question.\n- **WBA asks**: what does this learner **need next** — in this setting, with these patients, under these conditions? A developmental/coaching question.\n\n!! Different question → different evidence.\n\n## Variation is the world of practice\n\nBehind one observation stand: patient and acuity, workload and crowding, the team that day, the supervisor's state, the learner's state, the opportunities on shift.\n\n> This is not a failure of the workplace. This **is** the workplace.\n\nThe question is not whether context is error — but **which context matters, for which purpose**: some variation is irrelevant error, some may be bias, and some is exactly the adaptation we want to see.\n\n## The reliability problem is real — but it starts downstream\n\nA generalizability analysis of entrustment-derived WBA: **raters accounted for 37% of variance; residents only 19%** (Kelleher 2020). Important information. But the analysis begins only after observations have entered the dataset. WBA must also ask: **how did these observations become evidence in the first place?**\n\n## The learner is alive inside the assessment system\n\nLearners do not simply receive assessment — they **interpret** it: What is this for? Is it credible? Is it safe — help, or a label later? Then participation shifts: seek or avoid, show or protect.\n\n> \"I submit the item for what I did best that day.\" — strategic sampling, upstream of any statistics.\n> \"Even with a low score, it was worth it — the feedback was so solid.\" — credible coaching makes disclosure affordable.\n\n## The assessment system co-produces its evidence\n\nSystem design and perceived stakes → learner interpretation (purpose · credibility · risk) → participation and documentation → system response → committee decision. A portfolio is partly a record of competence — and partly a trace of how the system shaped disclosure.\n\n## Validity must include the conditions of evidence generation\n\n- Keep asking for: purposeful sampling, expert judgment, narrative evidence, committee synthesis.\n- Also examine: perceived stakes, relational credibility, protected observation, stage alignment, documentation burden, **system responsiveness**.\n\n!! Unequal safety and opportunity → unequal access to authentic documentation: an equity threat inside the evidence stream (next chapter takes this up).\n\n## Three questions, one axis\n\n- CTT asks: can this score distinguish learners reproducibly?\n- WBA asks: what does this learner need next, in this context?\n- PA asks: can the system turn many observations into a **decision we can defend**?\n\n— each completed by the same clause: **for this purpose, for these learners, in this context.**\n\n?? Chu Y-J, Sie Y-D, Chou FC. Mechanisms of learner engagement in CBME. Med Teach 2026; Kelleher M, et al. Acad Med 2020; Govaerts & van der Vleuten 2013.","questions":[{"id":"ctt-wba-q1","order":1,"promptZh":"回到開場案例：同一位住院醫師，星期一 Level 2、星期四 Level 4。請提出至少兩種不同的解釋，並說明每種解釋分別對應「誤差」「偏誤」還是「有意義的變異」。你會怎麼判斷是哪一種？","promptEn":"Return to the opening case: same resident, Level 2 on Monday, Level 4 on Thursday. Offer at least two different explanations, and classify each as error, bias, or meaningful variation. How would you decide which it is?","hintZh":"想想：病人難度、督導者標準、學習者狀態、真實成長⋯⋯判斷需要什麼額外資訊？","hintEn":"Consider: case difficulty, supervisor standards, learner state, real growth… what extra information would you need?","rubric":{"concepts":[{"key":"variance-types","labelZh":"區分誤差／偏誤／有意義變異","labelEn":"Error vs bias vs meaningful variation","keywords":["誤差","偏誤","error","bias","有意義","meaningful","調適","adaptation","變異","variation","variance"],"hitZh":"你能把情境變異拆成不同性質——這正是本章的核心主張：問題不是消除變異，而是判斷哪種變異對哪個目的重要。","hitEn":"You differentiated kinds of variation — the chapter's core claim: the task is not to eliminate variation but to judge which kind matters for which purpose.","missZh":"試著把每個解釋標上性質：督導者標準不一致偏「誤差／偏誤」；病人複雜度不同之下的表現差異，可能是我們想看的「調適」。","missEn":"Label each explanation: inconsistent supervisor standards lean error/bias; different performance under different case complexity may be the adaptation we want to see."},{"key":"context-info","labelZh":"判斷所需的脈絡資訊","labelEn":"Contextual information needed to judge","keywords":["病人","patient","難度","acuity","複雜","情境","context","narrative","敘事","了解","追問","更多資訊"],"hitZh":"你指出了判斷需要更多脈絡資訊——這正是為什麼 WBA 的效度不能只靠數字，需要敘事與情境紀錄。","hitEn":"You noted that judging requires more context — exactly why WBA validity cannot rest on numbers alone and needs narrative and contextual records.","missZh":"問問自己：要分辨這兩筆評分的性質，你還需要知道什麼（病人急重度？當時的督導關係？）？這說明了敘事證據為何不可或缺。","missEn":"Ask yourself what else you'd need to know (case acuity? the supervisory relationship?) — which shows why narrative evidence is indispensable."},{"key":"purpose-frame","labelZh":"以目的為判準","labelEn":"Purpose as the criterion","keywords":["目的","purpose","用途","決策","decision","為了"],"hitZh":"你用「目的」作為判準——同一筆變異，在教練目的下是資訊，在排名目的下才是誤差。","hitEn":"You used purpose as the criterion — the same variation is information for coaching and only becomes error for ranking.","missZh":"加上目的這一層：如果目的是教練式成長，星期一到星期四的差異本身就是有價值的學習資料，而非待消除的雜訊。","missEn":"Add the purpose layer: for coaching purposes, the Monday-to-Thursday difference is itself valuable learning data, not noise to remove."}],"misconceptions":[{"key":"standardize-all","labelZh":"以為標準化就能解決","labelEn":"Standardization will fix it","patterns":["標準化","統一標準","standardize","校準所有","一致性訓練就能","rater training will solve"],"clarifyZh":"評分者校準有其價值，但把 WBA 全面標準化會摧毀它的本體——真實性。變異是職場的本質，目標是詮釋變異，不是消滅它。","clarifyEn":"Rater calibration has value, but fully standardizing WBA destroys its essence — authenticity. Variation is the nature of the workplace; the goal is to interpret it, not erase it."},{"key":"one-is-wrong","labelZh":"假設必有一筆是錯的","labelEn":"One rating must be wrong","patterns":["一定有一個錯","哪個才是真的","which is the true score","真實分數","true score"],"clarifyZh":"「必有一筆是錯的」正是 CTT true-score 思維的殘影。兩筆評分可能都真實——它們表徵的是不同情境下的表現，而非同一潛在分數的兩次測量。","clarifyEn":"Assuming one must be wrong is the residue of CTT true-score thinking. Both ratings may be true — they represent performance in different contexts, not two draws of one latent score."}]}},{"id":"ctt-wba-q2","order":2,"promptZh":"「評量系統共同生產它之後要詮釋的證據。」請用你機構的實例（如 EPA 送審行為、學習歷程檔案）說明：系統設計或感知利害如何形塑了學習者「送出什麼、隱藏什麼」？這對資料的詮釋有何含意？","promptEn":"\"The assessment system co-produces the evidence it later interprets.\" Using an example from your institution (e.g., EPA submission behaviour, portfolios), show how system design or perceived stakes shaped what learners submit or withhold — and what that implies for interpreting the data.","hintZh":"想想住院醫師的話：「我都挑表現最好的項目送出。」你的系統裡有類似現象嗎？","hintEn":"Recall the resident: \"I submit the item for what I did best that day.\" Does your system show similar patterns?","rubric":{"concepts":[{"key":"strategic-sampling","labelZh":"策略性取樣行為","labelEn":"Strategic sampling","keywords":["挑","選擇性","策略","strategic","隱藏","保護","withhold","select","表現最好","best case","避開"],"hitZh":"你辨識出策略性取樣——它發生在任何統計之前，這意味著資料庫本身已是被形塑過的樣本。","hitEn":"You spotted strategic sampling — it happens upstream of any statistics, meaning the dataset itself is already a shaped sample.","missZh":"觀察一下：學習者送審的案例是隨機的嗎？如果他們系統性地挑選「安全」的案例，資料庫代表的就不是完整能力樣貌。","missEn":"Look closer: are submitted cases random? If learners systematically pick 'safe' cases, the dataset no longer represents the full competence picture."},{"key":"psych-safety","labelZh":"感知利害與心理安全","labelEn":"Perceived stakes & safety","keywords":["安全","safe","信任","trust","利害","stakes","風險","risk","標籤","label","可信","credib"],"hitZh":"你連結了感知利害與揭露行為——可信的教練關係讓揭露變得可負擔，這是證據品質的前置條件。","hitEn":"You linked perceived stakes to disclosure — credible coaching makes disclosure affordable, a precondition of evidence quality.","missZh":"加入學習者的視角：他們覺得這筆紀錄安全嗎（幫助 vs 日後的標籤）？感知利害直接改變揭露，進而改變證據。","missEn":"Add the learner's view: does this record feel safe (help vs future label)? Perceived stakes change disclosure, which changes the evidence."},{"key":"interpretation-implication","labelZh":"對資料詮釋的含意","labelEn":"Implications for interpretation","keywords":["詮釋","interpret","委員會","committee","ccc","決策","decision","缺席","missing","看不到"],"hitZh":"你把觀察推進到詮釋端——委員會讀到的不只是能力紀錄，也是系統形塑揭露的痕跡；「缺席的證據」同樣需要被詮釋。","hitEn":"You carried the observation into interpretation — committees read not just competence records but traces of how the system shaped disclosure; *missing* evidence also needs interpreting.","missZh":"最後一步：如果資料是被形塑的，CCC 在詮釋時該怎麼校正？至少要問「什麼樣的證據在這個系統裡不會出現」。","missEn":"Final step: if data are shaped, how should a CCC correct for it? At minimum, ask what kind of evidence would never appear in this system."}],"misconceptions":[{"key":"blame-learner","labelZh":"歸咎學習者不誠實","labelEn":"Blaming learner dishonesty","patterns":["學生不誠實","造假","投機","gaming","dishonest","取巧","混水摸魚"],"clarifyZh":"小心歸因方向：策略性取樣是對系統誘因的理性回應，不是品格缺陷。要改變行為，先改變系統的利害結構與回饋可信度。","clarifyEn":"Watch the attribution: strategic sampling is a rational response to system incentives, not a character flaw. To change behaviour, change the stakes structure and the credibility of feedback first."}]}},{"id":"ctt-wba-q3","order":3,"promptZh":"CTT、WBA、PA 各問一個問題（區辨？發展？可辯護的決策？）。在你目前參與的評量制度中，這三個問題各自由誰、在哪個環節回答？哪一個環節最弱？","promptEn":"CTT, WBA, and PA each ask a question (differentiation? development? defensible decisions?). In the assessment system you work in, who answers each question, and at which point? Which link is weakest?","hintZh":"把三個問題對應到具體機制：測驗／WBA 回饋／CCC 決策。","hintEn":"Map the three questions to concrete mechanisms: exams / WBA feedback / CCC decisions.","rubric":{"concepts":[{"key":"three-questions","labelZh":"三問的區分與對應","labelEn":"Mapping the three questions","keywords":["ctt","wba","pa","程序性","計畫性評量","programmatic","區辨","distinguish","發展","development","決策","defensible","可辯護"],"hitZh":"你能把三個問題對應到制度環節——這個對應表本身就是評量系統的診斷工具。","hitEn":"You mapped the three questions onto system components — that mapping is itself a diagnostic tool for an assessment program.","missZh":"做一個三欄對應：區辨（筆試／OSCE）、發展（WBA 回饋）、可辯護決策（CCC）。每一欄由誰負責？證據從哪裡來？","missEn":"Draw a three-column map: differentiation (exams/OSCE), development (WBA feedback), defensible decisions (CCC). Who owns each? Where does its evidence come from?"},{"key":"weakest-link","labelZh":"辨識最弱環節","labelEn":"Identifying the weakest link","keywords":["最弱","weakest","缺","不足","沒有","斷裂","gap","斷點","問題在"],"hitZh":"你指出了系統的斷點——多數機構最弱的是從「大量低利害資料」到「可辯護決策」的轉換環節。","hitEn":"You located the break point — for most programs, the weakest link is turning many low-stakes data points into a defensible decision.","missZh":"再誠實一點：你的系統裡，哪個問題其實沒有人在回答？常見的答案是 PA 之問——委員會如何把觀察轉成可辯護的決策。","missEn":"Be candid: which question does nobody actually answer in your system? Often it is PA's — how the committee turns observations into a defensible decision."}],"misconceptions":[]}}]},{"slug":"tensions","order":4,"speaker":"Mike Ryan","minutes":14,"titleZh":"效度理論應用於計畫性評量的三大張力","titleEn":"Three Tensions in Applying Validity Theory to Programmatic Assessment","summaryZh":"張力一：典範（post-positivism vs constructivism/pragmatism）。張力二：效度化的層級（單一工具 vs 評量系統；整體判斷 vs 分解）。張力三：能力的參照（常模、效標、或縱貫成長）。","summaryEn":"Tension 1: paradigm (post-positivism vs constructivism/pragmatism). Tension 2: level of validation (individual instruments vs systems; holism vs decomposition). Tension 3: the reference for competence (norm, criterion, or longitudinal growth).","contentZh":"## 張力一：評量的典範（Paradigm）\n\n典範是影響我們視角的認識論立場。評量領域至少並存三種：\n\n- **Post-positivism（後實證）**：存在近似客觀的能力真值，努力逼近它。\n- **Constructivism（建構）**：能力是社會建構的，意義在互動與脈絡中生成。\n- **Pragmatism（實用）**：以「對目的有沒有用」為判準，方法服務問題。\n\n對後實證的挑戰：客觀性真的可得嗎？在非標準化情境中期待信度合理嗎？對建構／實用的挑戰：若能力是社會建構的，可重現性還可能嗎？如何區分「有意義的個殊性（meaningful idiosyncrasies）」與偏誤、慣性評分、不良的作答歷程？\n\n## 張力二：效度化的層級（Level of Validation）\n\n- **單一評量取徑**：以證據充分性評斷個別工具（Messick／Kane 框架）；利害越高，證據要求越高。\n- **評量系統取徑**：多元資料點、多元來源、多元情境，由委員會統整為晉升決策（van der Vleuten & Schuwirth）。\n\n> Holism：這位醫師「整體上」能勝任嗎？ Decomposition：這位醫師「會不會做 __」？\n\n思考問題：能力判斷是純整體判斷，還是各資料點的加總？如何為**整個系統**建立效度論證？機構有沒有頻寬同時為個別工具與總結決策蒐集效度證據？\n\n## 張力三：能力的參照（Reference for Competence）\n\n- **常模參照（norm-referenced）**：看學習者之間的變異——誰比誰好。\n- **效標參照（criterion-referenced）**：看是否跨過既定門檻（threshold）——問責與保證的語言。\n- **縱貫成長（longitudinal growth）**：看學習者自身的變化軌跡（within-subject）——成長模型、latent growth curve。\n\n!! 門檻確保所有人達標（問責）；成長軌跡呈現個人發展（學習）。兩者的統計預設與效度證據完全不同。\n\n思考問題：有「預期的成長軌跡」嗎？怎樣的偏離算正常？成長反映真實進步，還是構念無關變異（construct-irrelevant variance）？已達門檻者的平緩曲線該怎麼詮釋？\n\n?? Ryan MS, Touchie C, Frank J, Chen HC, Kinnear B. Perspect Med Educ 2026 (in press)；van der Vleuten CPM, et al. Med Teach 2012；Kane MT. J Educ Meas 2013。","contentEn":"## Tension 1: The paradigm of assessment\n\nA paradigm is an epistemological stance that shapes our perspective. At least three coexist in assessment:\n\n- **Post-positivism**: a near-objective true level of competence exists; we approximate it.\n- **Constructivism**: competence is socially constructed; meaning arises in interaction and context.\n- **Pragmatism**: usefulness for the purpose is the criterion; methods serve questions.\n\nChallenges to post-positivism: is objectivity truly attainable? Is reliability a reasonable expectation in non-standardized settings? Challenges to constructivism/pragmatism: if competence is socially constructed, is reproducibility possible? How do we tease apart *meaningful idiosyncrasies* from bias, default rating habits, and poor response-process validity?\n\n## Tension 2: The level of validation\n\n- **Individual-assessment approach**: judge each instrument by the sufficiency of evidence for its interpretation (Messick/Kane); higher stakes demand more evidence.\n- **System-of-assessment approach**: a variety of data points, sources, and contexts, synthesized by a committee into a progress decision (van der Vleuten & Schuwirth).\n\n> Holism: is the doctor competent, overall? Decomposition: is the doctor able to do __?\n\nQuestions: is the final judgment holistic or additive? How do we build a validity argument for an entire system? Do programs have the bandwidth to collect validity evidence for both individual assessments and summative decisions?\n\n## Tension 3: The reference for competence\n\n- **Norm-referenced**: between-subject variance — who is better than whom.\n- **Criterion-referenced**: crossing a defined threshold — the language of accountability and assurance.\n- **Longitudinal growth**: within-subject change over time — growth modeling, latent growth curves.\n\n!! Thresholds assure that everyone meets the standard (accountability); growth curves show individual development (learning). Their statistical assumptions and validity evidence differ completely.\n\nQuestions: is there an expected growth trajectory, and what deviation is \"normal\"? Does growth reflect true improvement or construct-irrelevant variance? How do we interpret a flat curve in someone already above threshold?\n\n?? Ryan MS, Touchie C, Frank J, Chen HC, Kinnear B. Perspect Med Educ 2026 (in press); van der Vleuten CPM, et al. Med Teach 2012; Kane MT. J Educ Meas 2013.","questions":[{"id":"tensions-q1","order":1,"promptZh":"你自己做評量決策時，預設的典範比較接近哪一種（post-positivism / constructivism / pragmatism）？請舉一個實際決策為例，說明這個典範如何影響了你認為「什麼算證據」。","promptEn":"Which paradigm do you default to in your own assessment decisions — post-positivism, constructivism, or pragmatism? Give one real decision and show how that paradigm shaped what counted as evidence for you.","hintZh":"線索：你更信數字還是敘事？你期待兩位評分者一致嗎？","hintEn":"Clues: do you trust numbers or narratives more? Do you expect two raters to agree?","rubric":{"concepts":[{"key":"paradigm-awareness","labelZh":"典範自覺","labelEn":"Paradigm self-awareness","keywords":["post-positiv","constructiv","pragmat","後實證","建構","實用","典範","paradigm","認識論","epistem"],"hitZh":"你能命名自己的典範立場——典範自覺是評量素養的分水嶺：它讓「證據之爭」變成「立場之辨」。","hitEn":"You named your own paradigm — paradigm awareness is a watershed of assessment literacy: it turns fights about evidence into clarity about stance.","missZh":"試著先命名立場再談證據：如果你期待評分者一致、相信有真值，那是後實證；如果你把敘事與脈絡視為意義來源，那已經走向建構。","missEn":"Name the stance before the evidence: expecting rater agreement and a true score is post-positivist; treating narrative and context as sources of meaning is already constructivist."},{"key":"evidence-link","labelZh":"典範→證據的連動","labelEn":"Paradigm shapes evidence","keywords":["證據","evidence","算","count","數字","敘事","narrative","信度","reliability","一致"],"hitZh":"你展示了典範如何決定「什麼算證據」——這正是張力一的實作版：典範不是哲學裝飾，它直接改變資料的地位。","hitEn":"You showed how paradigm decides what counts as evidence — Tension 1 in action: paradigms are not philosophical decoration; they change the status of data.","missZh":"把連動說出來：在你的例子裡，若換一個典範，同一筆資料的地位會改變嗎（例如敘事從『軟資料』變成『核心證據』）？","missEn":"Spell out the linkage: under a different paradigm, would the same data change status (e.g., narrative from 'soft' to 'core' evidence)?"}],"misconceptions":[{"key":"paradigm-hierarchy","labelZh":"把典範當優劣排序","labelEn":"Paradigms as a ranking","patterns":["最科學","比較客觀就是比較好","constructivism 不科學","質性不嚴謹","qualitative is not rigorous"],"clarifyZh":"典範之間不是優劣關係，而是「不同問題適配不同典範」。嚴謹性在每個典範內都有各自的判準（如質性研究的 trustworthiness）。","clarifyEn":"Paradigms are not ranked; different questions fit different paradigms. Rigor has its own criteria within each (e.g., trustworthiness in qualitative work)."}]}},{"id":"tensions-q2","order":2,"promptZh":"你的機構（或你熟悉的訓練計畫）目前的晉升決策，比較接近「各資料點加總」還是「整體判斷」？此設計對效度論證的最大風險是什麼？如果要為「整個評量系統」而非單一工具建立效度論證，第一步你會做什麼？","promptEn":"Are progression decisions in your program closer to additive aggregation or holistic judgment? What is the biggest validity risk of that design? If you had to build a validity argument for the whole system rather than a single tool, what would your first step be?","hintZh":"想想 CCC 實際怎麼運作：算平均？討論形成共識？誰的聲音大？","hintEn":"How does your CCC actually work: averaging? consensus discussion? whose voice dominates?","rubric":{"concepts":[{"key":"holism-decomposition","labelZh":"整體 vs 分解的辨識","labelEn":"Holism vs decomposition","keywords":["整體","holis","加總","additive","分解","decompos","平均","average","共識","consensus"],"hitZh":"你辨識出決策的實際邏輯——很多機構表面上談整體判斷，實際上是分數加總；命名這個落差是改革的起點。","hitEn":"You identified the decision's actual logic — many programs talk holism but practice averaging; naming that gap is where reform starts.","missZh":"觀察 CCC 的實際操作：如果最後是把量表分數平均，那是 decomposition 的加總邏輯；整體判斷需要的是證據的『統整詮釋』而非算術。","missEn":"Watch what the CCC actually does: averaging scale scores is additive decomposition; holistic judgment requires interpretive synthesis, not arithmetic."},{"key":"system-argument","labelZh":"系統層級的效度論證","labelEn":"System-level validity argument","keywords":["系統","system","kane","論證","argument","推論","inference","決策","decision","程序"],"hitZh":"你把效度論證的單位從工具移到系統——這是張力二的關鍵移動：效度化的對象是『晉升決策』，證據鏈要涵蓋委員會程序本身。","hitEn":"You shifted the unit of validation from tool to system — Tension 2's key move: what gets validated is the *progress decision*, and the evidence chain must include committee process itself.","missZh":"第一步建議：把『晉升決策』當作待效度化的詮釋，用 Kane 的推論鏈往回追——決策依據什麼統整？統整依據什麼觀察？每一環的證據在哪？","missEn":"Suggested first step: treat the progress decision as the interpretation to validate, then trace Kane's inference chain backwards — what synthesis feeds it, what observations feed that, and where is the evidence for each link?"}],"misconceptions":[{"key":"sum-of-valid","labelZh":"以為有效工具相加＝有效系統","labelEn":"Valid tools sum to a valid system","patterns":["每個工具都有效","工具都驗證過","all tools are validated","加起來就有效","個別都沒問題"],"clarifyZh":"系統效度不是工具效度的總和：取樣結構、資料整合方式、委員會的詮釋程序，都會引入工具層級看不到的效度威脅。","clarifyEn":"System validity is not the sum of tool validities: sampling structure, aggregation, and committee interpretation introduce threats invisible at the tool level."}]}},{"id":"tensions-q3","order":3,"promptZh":"一位住院醫師的 EPA 評分曲線一路平緩，但始終高於門檻。用「張力三」的語言分析：常模、效標、成長三種參照分別會怎麼解讀他？你的訓練計畫實際上會怎麼處理——這透露了什麼？","promptEn":"A resident's EPA ratings are flat over time but always above threshold. Analyze through Tension 3: how would norm-, criterion-, and growth-referenced framings each read this resident? What would your program actually do — and what does that reveal?","hintZh":"平緩＝停滯？還是＝早已勝任？答案取決於參照系。","hintEn":"Flat = stagnation, or = already competent? The answer depends on the reference.","rubric":{"concepts":[{"key":"three-references","labelZh":"三種參照系的區分","labelEn":"Distinguishing three references","keywords":["常模","norm","效標","criterion","成長","growth","門檻","threshold","軌跡","trajectory","參照"],"hitZh":"你能讓三種參照系各自發聲——同一條曲線在不同參照下意義完全不同，這正是張力三的核心。","hitEn":"You let each reference speak — the same curve means different things under different references, which is Tension 3's core.","missZh":"分開來讀：效標參照說「他達標了，沒問題」；成長參照問「為什麼不再進步」；常模參照問「他相對同儕在哪」。三者都對，也都不完整。","missEn":"Read them separately: criterion says 'above standard, fine'; growth asks 'why no further development'; norm asks 'where relative to peers'. Each is right — and incomplete."},{"key":"purpose-choice","labelZh":"參照系的選擇反映目的","labelEn":"Reference choice reveals purpose","keywords":["目的","purpose","問責","accountab","學習","learning","反映","透露","reveal","價值"],"hitZh":"你看出參照系的選擇不是統計問題而是價值與目的問題——機構怎麼處理平緩曲線，透露它真正優先的是保證還是成長。","hitEn":"You saw that choosing a reference is a question of values and purpose, not statistics — how a program treats a flat curve reveals whether it truly prioritizes assurance or growth.","missZh":"加一層：你的計畫實際的處理方式（例如「達標就不管了」），透露它實際運作的參照系是哪一個？與它宣稱的 CBME 成長理念一致嗎？","missEn":"Add a layer: what your program actually does (e.g., 'above threshold, case closed') reveals its operating reference — is that consistent with its declared CBME growth ethos?"}],"misconceptions":[{"key":"flat-is-bad","labelZh":"把平緩曲線一律視為警訊","labelEn":"Flat curve = problem","patterns":["平緩就是有問題","沒進步就是退步","flat means failing","停滯就該補救","remediation for flat"],"clarifyZh":"已在門檻之上的平緩曲線可能代表「已達適任並穩定維持」——把它自動當警訊，是把成長參照誤用成普世judgment。詮釋前先問目的。","clarifyEn":"A flat curve above threshold may mean stable, established competence — auto-flagging it misapplies the growth reference as a universal judgment. Ask the purpose before interpreting."}]}}]},{"slug":"equity","order":5,"speaker":"Jamiu Busari","minutes":10,"titleZh":"當公平遇上效度","titleEn":"Equity Meets Validity","summaryZh":"評量若不公平就不可能有效——不公平會扭曲效度所依賴的詮釋本身。公平不是效度的附加項，而是前置條件：它形塑什麼算證據、證據如何被詮釋、以及評量的後果。","summaryEn":"An assessment cannot be valid if it is not equitable — inequity distorts the very interpretations validity depends on. Equity is not an add-on but a precondition: it shapes what counts as evidence, how evidence is interpreted, and the consequences of assessment.","contentZh":"## 核心主張\n\n> 評量若不公平，就不可能有效——因為不公平扭曲了效度所依賴的詮釋本身。\n\nRandall（2026）與 Kakara Anderson 等（2025）指出：公平不是效度的「附加項」，而是**前置條件**。公平有多種取向（fairness／inclusion／justice），每種取向會形塑效度論證需要的證據。\n\n## 公平支撐效度的三個條件\n\n- **邊緣群體的有意義參與**：不同背景的學習者必須參與構念定義、工具審查與結果詮釋——沒有參與，就無法對這些群體做出有效推論。\n- **公平取向的透明化**：評量設計者必須明說自己採取哪種公平取向，效度論證才能對齊適當的方法與證據。\n- **對詮釋者適切性的反身性（reflexivity）**：詮釋不是中立的——評量者與委員會的位置性（positionality）與偏誤，本身就是效度證據的一部分。\n\n## 為什麼公平對效度不可或缺\n\n- 公平形塑**什麼算證據**：若設計排除了某些群體的視角，效度的證據基礎就是不完整的。\n- 公平形塑**證據如何被詮釋**：詮釋判斷反映評量者的位置與偏誤，效度要求檢視這些影響。\n- 公平形塑**評量的後果**：系統性不利某些群體的評量，其後果效度（consequential validity）已然受損。\n\n!! 連回上一章：不平等的心理安全與學習機會，導致不平等的真實紀錄管道——公平威脅就藏在證據流內部，而非只在分數之後。\n\n?? Randall J. Med Educ 2026 (When I say… validity)；Kakara Anderson HL, et al. 2025；Busari JO 等。","contentEn":"## The central claim\n\n> An assessment cannot be valid if it is not equitable — because inequity distorts the very interpretations on which validity depends.\n\nRandall (2026) and Kakara Anderson et al. (2025) show that equity is not an \"add-on\" to validity — it is a **precondition**. Equity has multiple orientations (fairness / inclusion / justice), and each orientation shapes what evidence a validity argument needs.\n\n## Three conditions for equity to support validity\n\n- **Meaningful engagement of marginalized populations**: trainees from diverse backgrounds must participate in defining constructs, reviewing tools, and interpreting results — without engagement, valid inferences about these groups are not possible.\n- **Transparency about the equity orientation**: assessment designers must articulate their orientation so validity arguments can align with appropriate methods and evidence.\n- **Reflexivity about interpreter appropriateness**: interpretation is not neutral — the positionality and biases of assessors and committees are themselves part of the validity evidence.\n\n## Why equity is indispensable for validity\n\n- Equity shapes **what counts as evidence**: designs that exclude certain groups' perspectives leave the evidence base incomplete.\n- Equity shapes **how evidence is interpreted**: interpretive judgment reflects the assessor's position and biases; validity requires examining those influences.\n- Equity shapes **the consequences of assessment**: assessments that systematically disadvantage groups have already compromised consequential validity.\n\n!! Linking back to Chapter 3: unequal psychological safety and opportunity produce unequal access to authentic documentation — the equity threat lives inside the evidence stream, not only after the scores.\n\n?? Randall J. Med Educ 2026 (When I say… validity); Kakara Anderson HL, et al. 2025; Busari JO et al.","questions":[{"id":"equity-q1","order":1,"promptZh":"「標準化＝公平」是評量中常見的直覺。根據本章與第三章，請說明為什麼在 WBA 情境中，標準化與公平可能脫鉤，甚至互相衝突？請舉一個具體例子。","promptEn":"\"Standardization = fairness\" is a common intuition. Drawing on this chapter and Chapter 3, explain why standardization and equity can come apart — even conflict — in WBA. Give a concrete example.","hintZh":"想想：相同的量表，不同的輪訓機會、病人組合、督導關係、心理安全。","hintEn":"Consider: identical forms, but unequal rotations, case mix, supervisory relationships, psychological safety.","rubric":{"concepts":[{"key":"std-fairness-split","labelZh":"標準化與公平的脫鉤","labelEn":"Decoupling standardization from equity","keywords":["脫鉤","不等於","不同機會","機會不均","opportunity","unequal","相同量表","same form","表面公平","formal equality"],"hitZh":"你拆開了「形式相同」與「實質公平」——相同的量表施加在不平等的機會結構上，只會把不平等紀錄得更工整。","hitEn":"You separated formal sameness from substantive equity — identical forms applied to unequal opportunity structures merely document inequity more neatly.","missZh":"試著區分兩層：量表相同（形式）≠ 被觀察的機會、案例組合、督導關係相同（實質）。WBA 的公平問題主要在第二層。","missEn":"Distinguish two layers: identical forms (formal) ≠ equal observation opportunities, case mix, and supervisory relationships (substantive). WBA's equity problem lives in the second layer."},{"key":"evidence-stream-equity","labelZh":"證據流內部的公平威脅","labelEn":"Equity threat inside the evidence stream","keywords":["證據流","evidence stream","心理安全","psychological safety","揭露","disclosure","紀錄","documentation","safety"],"hitZh":"你把公平威脅定位在證據生成階段——這是本課程最重要的整合點之一：不平等的安全感直接造成不平等的真實紀錄。","hitEn":"You located the equity threat at evidence generation — one of this course's key integrations: unequal safety directly produces unequal authentic documentation.","missZh":"連回第三章：若某些學習者覺得揭露弱點較不安全（語言、性別、位階、國際學位），他們的 portfolio 會系統性缺少什麼？","missEn":"Link back to Chapter 3: if some learners feel less safe disclosing weakness (language, gender, hierarchy, IMG status), what will be systematically missing from their portfolios?"}],"misconceptions":[{"key":"equity-lower-bar","labelZh":"把公平誤解為降低標準","labelEn":"Equity as lowering the bar","patterns":["降低標準","放水","lower the bar","double standard","雙重標準","對某些人比較鬆"],"clarifyZh":"公平不是降低標準，而是確保每位學習者有同等機會「展現」能力、其證據被同等適切地「詮釋」。標準不變，通往標準的證據管道要公平。","clarifyEn":"Equity is not lowering standards — it is ensuring equal opportunity to demonstrate competence and equally sound interpretation of that evidence. The standard stays; the evidence pathways must be fair."}]}},{"id":"equity-q2","order":2,"promptZh":"檢視你機構的評量或晉升委員會：三個條件（邊緣群體參與、公平取向透明、詮釋者反身性）中，哪一個最缺乏？一個可行的第一步改變是什麼？","promptEn":"Audit your institution's assessment or promotion committee against the three conditions (engagement of marginalized groups, transparency of equity orientation, interpreter reflexivity). Which is most lacking, and what is one feasible first step?","hintZh":"反身性的操作化例子：委員會會議中是否曾問「我們的組成會怎麼影響這個判斷」？","hintEn":"An operationalized reflexivity example: has the committee ever asked how its own composition shapes this judgment?","rubric":{"concepts":[{"key":"three-conditions","labelZh":"三條件的應用","labelEn":"Applying the three conditions","keywords":["參與","engagement","透明","transparen","反身","reflexiv","位置性","positionality","條件"],"hitZh":"你能用三條件做制度審視——把 equity 從口號變成可稽核的設計要素。","hitEn":"You used the three conditions as an audit frame — turning equity from slogan into auditable design elements.","missZh":"逐一檢查：學習者（尤其非主流背景者）參與過工具設計嗎？委員會說得出自己的公平取向嗎？討論時檢視過自身組成的影響嗎？","missEn":"Check each: have learners (especially from non-dominant backgrounds) shaped the tools? Can the committee name its equity orientation? Does it examine its own composition's influence?"},{"key":"feasible-step","labelZh":"可行的第一步","labelEn":"A feasible first step","keywords":["第一步","first step","可行","feasible","開始","start","具體","concrete","做法"],"hitZh":"你提出了可實作的起點——公平工程和其他改革一樣，始於一個小而明確的程序改變，而非全面翻修。","hitEn":"You proposed an implementable start — equity work, like other reforms, begins with one small explicit procedural change, not a full overhaul.","missZh":"把改變縮小到一個程序：例如在 CCC 議程固定加入一個反身性提問，或邀請住院醫師代表參與評量工具年度審查。","missEn":"Shrink the change to one procedure: a standing reflexivity question on the CCC agenda, or resident representation in the annual review of assessment tools."}],"misconceptions":[]}}]},{"slug":"synthesis","order":6,"speaker":"Claire Touchie & Ben Kinnear","minutes":10,"titleZh":"整合與前瞻：效度的再概念化","titleEn":"Putting It Together: Reconceptualizing Validity","summaryZh":"效度不是靜態概念，效度是一種權力，後果很重要。在 CBME 與計畫性評量的脈絡中，效度論證的終點不是分數，而是「把病人託付給一個人」這個有後果的決定。","summaryEn":"Validity is not a static concept; validity is power; consequences matter. In CBME and programmatic assessment, the endpoint of a validity argument is not a score but the consequential decision to entrust a person with patient care.","contentZh":"## 效度是⋯⋯\n\n- **不是靜態概念**：效度理論本身歷經典範遞變（St-Onge 2016 的隱喻分析：效度作為檢驗、作為論證、作為社會建構）。我們此刻正在下一次遞變之中。\n- **是權力**：誰定義構念、誰決定什麼算證據、誰的詮釋算數——效度的技術語言背後是權力的分配（Eva & Cummings 2026：狹隘的效度概念如何傷害了評量）。\n- **後果很重要**：Messick 以降，consequential validity 始終是效度的一部分。在 CBME 中，後果不只落在學習者，也落在病人與系統。\n\n## 放回 CBME 的脈絡\n\n計畫性評量的要素：多元評量（低利害與高利害並存）、不標準化的 WBA、設定標準之下的成長心態、鑲嵌在情境與文化中的 clinical competency committee、以及最終——**把病人照護託付給一個人的決定**。\n\n## 所以，效度⋯⋯\n\n!! 效度不是工具的證書，而是一個持續的、涉及價值與權力的論證實踐：為了這個目的、為了這些學習者、在這個情境中，我們的決策是否站得住腳？\n\n## 回到最初的問題（現在你可以自己回答了）\n\n- 文憑重要，還是照護自主的決定重要？\n- 什麼樣的評量系統，能生產讓學習者、督導者、機構——以及病人——都能信任的證據？\n- 若能力是社會建構的，可重現性還可能嗎？\n- 如何區分有意義的個殊性與偏誤？\n\n> This is thorny business——歡迎加入這場還在進行中的對話。\n\n?? St-Onge C, et al. Adv Health Sci Educ 2016；Eva KW, Cummings BA. Med Educ 2026；Kinnear B, et al. 2021–2024。","contentEn":"## Validity is…\n\n- **Not a static concept**: validity theory itself has moved through paradigms (St-Onge 2016's metaphor analysis: validity as test property, as argument, as social imperative). We are living through the next shift now.\n- **Power**: who defines the construct, who decides what counts as evidence, whose interpretation counts — behind validity's technical language sits a distribution of power (Eva & Cummings 2026: how narrow conceptions of validity have harmed assessment).\n- **About consequences**: since Messick, consequential validity has been part of validity itself. In CBME, consequences fall not only on learners but on patients and systems.\n\n## Back into the CBME context\n\nThe elements of programmatic assessment: multiple assessments (low- and high-stakes), unstandardized WBAs, a growth mindset with a standard being set, competence committees embedded in context and culture, and finally — **the decision to entrust an individual with patient care**.\n\n## So, validity…\n\n!! Validity is not a certificate attached to a tool but an ongoing argumentative practice involving values and power: for this purpose, for these learners, in this context — can our decisions be defended?\n\n## Back to the opening questions (you can now answer them yourself)\n\n- Which matters more: the diploma, or the decision for autonomy in patient care?\n- What kind of assessment system produces evidence that learners, supervisors, programs — and patients — can trust?\n- If competence is socially constructed, is reproducibility possible?\n- How do we tease meaningful idiosyncrasies apart from bias?\n\n> This is thorny business — welcome to a conversation still in progress.\n\n?? St-Onge C, et al. Adv Health Sci Educ 2016; Eva KW, Cummings BA. Med Educ 2026; Kinnear B, et al. 2021–2024.","questions":[{"id":"synthesis-q1","order":1,"promptZh":"「效度是權力。」請用一個你經歷過的評量制度說明：誰定義了構念？誰決定什麼算證據？誰的詮釋最後算數？這個權力配置對哪些人有利、對哪些人不利？","promptEn":"\"Validity is power.\" Using an assessment system you have experienced: who defined the construct? Who decided what counts as evidence? Whose interpretation finally counted? Who did this power arrangement favour, and who did it disadvantage?","hintZh":"可以從很小的地方開始：一張評核表的欄位是誰設計的？","hintEn":"Start small: who designed the fields on one evaluation form?","rubric":{"concepts":[{"key":"power-analysis","labelZh":"權力分析的三個環節","labelEn":"Three sites of power","keywords":["誰","who","權力","power","定義","define","決定","decide","詮釋","interpret"],"hitZh":"你把「效度是權力」操作化為可分析的三個環節——構念定義、證據准入、詮釋權——這讓批判有了施力點。","hitEn":"You operationalized 'validity is power' into three analyzable sites — construct definition, evidence admission, interpretive authority — giving critique real purchase.","missZh":"把問題拆成三個「誰」：誰定義構念（表單設計者）？誰決定什麼算證據（制度）？誰的詮釋算數（委員會）？逐一回答。","missEn":"Split it into three whos: who defines the construct (form designers)? who admits evidence (the system)? whose interpretation counts (the committee)? Answer each."},{"key":"winners-losers","labelZh":"受益者與受損者的辨識","labelEn":"Who benefits, who bears cost","keywords":["有利","不利","favour","disadvantage","受益","受損","邊緣","marginal","主流","dominant"],"hitZh":"你指認了權力配置的分配效果——這一步把效度批判與上一章的公平分析接合起來。","hitEn":"You named the distributional effects — the step that joins validity critique to the previous chapter's equity analysis.","missZh":"補上分配問題：這套定義與詮釋權的安排，讓哪類學習者的長處容易被看見？哪類學習者的能力被系統性低估？","missEn":"Add the distributional question: whose strengths does this arrangement make visible, and whose competence does it systematically underread?"}],"misconceptions":[{"key":"power-cynicism","labelZh":"滑向犬儒（一切只是權力）","labelEn":"Sliding into cynicism","patterns":["都是政治","評量沒有意義","all politics","assessment is meaningless","反正都是權力","沒有客觀"],"clarifyZh":"「效度是權力」是要求我們把權力納入論證與究責，不是宣告評量無意義。承認建構性之後，嚴謹與可辯護性反而更重要。","clarifyEn":"'Validity is power' demands we bring power into the argument and its accountability — not that assessment is meaningless. After acknowledging construction, rigor and defensibility matter more, not less."}]}},{"id":"synthesis-q2","order":2,"promptZh":"課程總結題：完成六章後，請重寫你對「效度」的定義（3–5 句），必須包含：目的、情境、決策、後果四個元素，並指出你的定義與課程開始前的想法最大的差異。","promptEn":"Capstone: having completed all six chapters, rewrite your definition of validity (3–5 sentences) incorporating four elements — purpose, context, decision, and consequences — and name the biggest difference from what you thought before this course.","hintZh":"這一題的回答會是研究者最重視的資料：請誠實寫下改變（或沒有改變）之處。","hintEn":"Researchers value this answer most: be honest about what changed — or didn't.","rubric":{"concepts":[{"key":"four-elements","labelZh":"四元素的整合","labelEn":"Integrating the four elements","keywords":["目的","purpose","情境","context","決策","decision","後果","consequence"],"hitZh":"你的定義涵蓋了目的、情境、決策與後果——這已是當代效度論的完整骨架，比多數教科書定義更接近實務。","hitEn":"Your definition spans purpose, context, decision, and consequences — the full skeleton of contemporary validity theory, closer to practice than most textbook definitions.","missZh":"檢查四元素是否都在：許多定義寫了目的與情境，卻漏掉「決策」（效度論證的終點）與「後果」（Messick 的遺產）。","missEn":"Check all four: many definitions include purpose and context but omit decision (the argument's endpoint) and consequences (Messick's legacy)."},{"key":"change-awareness","labelZh":"概念改變的自覺","labelEn":"Awareness of conceptual change","keywords":["以前","原本","before","改變","changed","差異","difference","現在","now","轉變"],"hitZh":"你能指認自己概念的變化——這種 metacognitive 的對照，正是概念改變（conceptual change）發生的最好證據。","hitEn":"You can name your own conceptual shift — that metacognitive contrast is the best evidence that conceptual change actually occurred.","missZh":"補上前後對照：課程前你大概怎麼想效度（例如「信度＋效度＝好工具」）？現在的定義在哪一點上真正不同了？","missEn":"Add the before/after: how did you think of validity before (e.g., 'reliability + validity = good tool')? Where exactly does your new definition differ?"}],"misconceptions":[{"key":"back-to-tool","labelZh":"定義又回到工具屬性","labelEn":"Definition regresses to tool property","patterns":["工具的效度","量表的效度","the tool's validity","測驗的效度是指工具"],"clarifyZh":"留意：如果你的新定義仍以「工具」為主詞，它就還停在課程起點。試著把主詞換成「詮釋」或「決策」再寫一次。","clarifyEn":"Notice: if your new definition still takes 'the tool' as its subject, it remains at the course's starting point. Try rewriting with 'interpretation' or 'decision' as the subject."}]}}]}];
+
+/* ── i18n ───────────────────────────────── */
+const UI = {
+  zh:{ site:"效度新視界", learner:"學員", researcher:"研究者", admin:"管理者", lang:"EN",
+    home:"學習首頁", chapters:"章節", profile:"我的歷程", dash:"分析儀表板", content:"內容管理", roles:"權限說明",
+    back:"回到首頁", start:"開始學習", cont:"繼續學習", done:"已完成", ing:"進行中", not:"尚未開始",
+    mark:"標記本章完成", marked:"本章已完成", prev:"上一章", next:"下一章", min:"分鐘",
+    reflect:"反思與引導問題", yours:"你的想法⋯⋯", submit:"送出並取得回饋", again:"再答一次",
+    hint:"思考提示", prevAns:"你先前的回答", short:"請再多寫一點（至少一兩句）",
+    ch:"章", chapters6:"六個章節", fourQ:"我們從四個問題出發",
+    kb:"知識庫", ruleFb:"規則回饋（確定性）", aiFb:"AI 個別化回饋",
+    thinking:"Claude 正在讀你的回答⋯⋯", stop:"停止", regen:"重新產生", askAI:"取得 AI 個別化回饋",
+    aiOff:"此環境無法使用 AI 回饋", grounded:"依課程內容＋審定知識", ungrounded:"依課程內容（尚無審定知識）",
+    beyond:"部分內容取自模型自身知識，未經你審定", understand:"你已理解的部分", stillGap:"尚未觸及",
+    clarify:"需要澄清", nextStep:"下一步建議", sufficiency:"知識充足度",
+    addK:"新增審定知識", source:"出處（例：ten Cate 2024, Med Educ）", ktext:"知識內容（會作為 AI 回饋的依據）",
+    exportK:"匯出知識庫 JSON", importK:"匯入知識庫 JSON", del:"刪除" },
+  en:{ site:"Rethinking Validity", learner:"Learner", researcher:"Researcher", admin:"Admin", lang:"中文",
+    home:"Home", chapters:"Chapters", profile:"My progress", dash:"Dashboard", content:"Content", roles:"Permissions",
+    back:"Back to home", start:"Start learning", cont:"Continue", done:"Completed", ing:"In progress", not:"Not started",
+    mark:"Mark chapter complete", marked:"Chapter completed", prev:"Previous", next:"Next", min:"min",
+    reflect:"Reflection & guiding questions", yours:"Your thoughts…", submit:"Submit for feedback", again:"Answer again",
+    hint:"Hint", prevAns:"Your previous answer", short:"Please write a bit more (a sentence or two)",
+    ch:"Chapter", chapters6:"Six chapters", fourQ:"We start from four questions",
+    kb:"Knowledge base", ruleFb:"Rule-based feedback (deterministic)", aiFb:"AI personalized feedback",
+    thinking:"Claude is reading your answer…", stop:"Stop", regen:"Regenerate", askAI:"Get AI feedback",
+    aiOff:"AI feedback is unavailable in this view", grounded:"Grounded in course content + vetted knowledge",
+    ungrounded:"Grounded in course content (no vetted knowledge yet)",
+    beyond:"Parts draw on the model's own knowledge, not vetted by you", understand:"What you already grasp",
+    stillGap:"Not yet addressed", clarify:"Needs clarifying", nextStep:"Suggested next step",
+    sufficiency:"Knowledge sufficiency",
+    addK:"Add vetted knowledge", source:"Source (e.g. ten Cate 2024, Med Educ)",
+    ktext:"Knowledge text (used as the basis for AI feedback)",
+    exportK:"Export knowledge JSON", importK:"Import knowledge JSON", del:"Delete" }
+};
+
+/* ── state ──────────────────────────────── */
+/* Vetted knowledge baked in at publish time: questionId -> [{source, text}].
+   The admin's Knowledge base panel exports additions as JSON; hand that
+   JSON back to be baked in here so every viewer gets it. */
+const BAKED_KB = {};
+
+const KEY = "validity-lab-v1";
+let S = { lang:"zh", role:"LEARNER", view:"home", slug:null, progress:{}, responses:[], kb:{} };
+try{ const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); }catch(e){}
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+const t  = k => UI[S.lang][k];
+const p  = (zh,en) => S.lang==="zh" ? (zh||en) : (en||zh);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const chBySlug = s => DATA.find(c => c.slug === s);
+const allQ = () => DATA.flatMap(c => c.questions.map(q => ({...q, ch:c})));
+const kbFor = qid => [].concat(BAKED_KB[qid]||[], (S.kb && S.kb[qid]) || []);
+
+/* Knowledge sufficiency — computed from real signals, not a guess.
+   content: chapter body length · rules: concept + misconception rules · vetted: curated excerpts */
+function sufficiency(ch, q){
+  const chars = (ch.contentZh||"").replace(/\s/g,"").length;
+  const nc = (q.rubric.concepts||[]).length, nm = (q.rubric.misconceptions||[]).length;
+  const nk = kbFor(q.id).length;
+  const sContent = Math.min(chars/1200, 1);
+  const sRules   = Math.min((nc/3)*0.6 + (nm/2)*0.4, 1);
+  const sVetted  = Math.min(nk/3, 1);
+  const score = sContent*0.3 + sRules*0.3 + sVetted*0.4;
+  let level, tone;
+  if(score >= .7){ level = p("充足","Solid"); tone = "teal"; }
+  else if(score >= .4){ level = p("尚可","Adequate"); tone = "purple"; }
+  else { level = p("偏薄","Thin"); tone = "orange"; }
+  const todo = [];
+  if(nk < 3) todo.push(p("再加 "+(3-nk)+" 則審定知識","add "+(3-nk)+" vetted excerpt(s)"));
+  if(nm === 0) todo.push(p("尚無誤區規則","no misconception rule yet"));
+  if(nc < 3) todo.push(p("概念規則少於 3 條","fewer than 3 concept rules"));
+  if(chars < 800) todo.push(p("章節內容偏短","chapter body is short"));
+  return {score, level, tone, chars, nc, nm, nk, todo};
+}
+
+/* ── rule-based feedback engine (same logic as the full system) ── */
+const norm = s => String(s).toLowerCase().replace(/\s+/g," ").trim();
+function analyze(text, rubric){
+  const x = norm(text), hits=[], gaps=[], flags=[];
+  (rubric.concepts||[]).forEach(c=>{
+    const hit = (c.keywords||[]).some(k=>k && x.includes(norm(k)));
+    (hit ? hits : gaps).push({
+      key:c.key, labelZh:c.labelZh, labelEn:c.labelEn,
+      msgZh: hit ? c.hitZh : c.missZh,
+      msgEn: hit ? c.hitEn : c.missEn
+    });
+  });
+  (rubric.misconceptions||[]).forEach(m=>{
+    if((m.patterns||[]).some(k=>k && x.includes(norm(k))))
+      flags.push({key:m.key, labelZh:m.labelZh, labelEn:m.labelEn, msgZh:m.clarifyZh, msgEn:m.clarifyEn});
+  });
+  const total = (rubric.concepts||[]).length || 1;
+  return {hits, gaps, flags, score: hits.length/total};
+}
+
+/* ── AI personalized feedback (the `sample` capability) ── */
+let sampleFn = null, sampleResolved = false, downloadsFn = null;
+const aiCtl = {};   // responseId -> AbortController
+
+function resolveCap(name, done){
+  try{
+    const pr = window.claude && window.claude.use && window.claude.use(name);
+    if(pr && pr.then){ pr.then(done).catch(()=>done(null)); return; }
+  }catch(e){}
+  done(null);
+}
+resolveCap("sample", f => {
+  sampleFn = f; sampleResolved = true;
+  if(!document.querySelector("textarea:focus, input:focus")) render();
+});
+resolveCap("downloads", d => { downloadsFn = d; });
+
+function buildPrompt(r, q){
+  const kb = kbFor(q.id);
+  const zh = S.lang === "zh";
+  const body = (zh ? q.ch.contentZh : q.ch.contentEn).slice(0, 3200);
+  const concepts = (q.rubric.concepts||[])
+    .map(c => "- " + p(c.labelZh,c.labelEn) + "：" + p(c.hitZh,c.hitEn)).join("\n") || "（無）";
+  const mis = (q.rubric.misconceptions||[])
+    .map(m => "- " + p(m.labelZh,m.labelEn) + "：" + p(m.clarifyZh,m.clarifyEn)).join("\n") || "（無）";
+  const vetted = kb.length
+    ? kb.map((k,i) => "[" + (i+1) + "] " + (k.source ? k.source + " — " : "") + k.text).join("\n")
+    : (zh ? "（尚無審定知識）" : "(none provided)");
+
+  const lang = zh
+    ? "以繁體中文（台灣慣用）撰寫，保留 validity、programmatic assessment、WBA、entrustment 等英文專業術語。"
+    : "Write in clear academic English.";
+
+  return [
+    zh ? "你是醫學教育評量效度領域的專家，正在為一位臨床教師的反思作答提供形成性回饋。這是師資培育課程，不是考試——回饋要溫暖、具體、可行，像一位資深同儕的教練式回應。"
+       : "You are an expert in assessment validity in medical education, giving formative feedback on a clinical teacher's reflection in a faculty development course. Not an exam — be warm, specific and actionable, like a senior peer coaching a colleague.",
+    "",
+    (zh?"【課程章節】":"[CHAPTER] ") + p(q.ch.titleZh,q.ch.titleEn),
+    (zh?"【章節內容（教材本文）】":"[CHAPTER BODY]") + "\n" + body,
+    "",
+    (zh?"【本題預期觸及的概念】":"[EXPECTED CONCEPTS]") + "\n" + concepts,
+    (zh?"【本題常見誤解】":"[COMMON MISCONCEPTIONS]") + "\n" + mis,
+    (zh?"【授課者審定的知識內容】":"[INSTRUCTOR-VETTED KNOWLEDGE]") + "\n" + vetted,
+    "",
+    (zh?"【反思問題】":"[QUESTION]") + "\n" + p(q.promptZh,q.promptEn),
+    (zh?"【學習者的回答】":"[LEARNER'S ANSWER]") + "\n" + r.text,
+    "",
+    zh ? "請針對「這一位學習者實際寫的內容」給回饋——引用他自己的用詞與例子，不要給通用評語。優先以上述教材與審定知識為依據；若必須動用教材之外的知識才能澄清，可以，但要在 beyondSource 標記為 true。"
+       : "Respond to what THIS learner actually wrote — quote their own words and examples; no generic commentary. Ground your feedback in the material above; if you must go beyond it to clarify, you may, but set beyondSource to true.",
+    lang,
+    "",
+    zh ? '只輸出 JSON，格式為：{"understanding":"2-3 句，指出他確實掌握了什麼，引用他的原話","gaps":["1-3 條，他尚未觸及但本題重要的面向"],"misconceptions":[{"name":"誤解名稱","clarify":"2-3 句澄清，針對他的說法"}],"nextStep":"1-2 句，一個具體可做的下一步","beyondSource":false}'
+       : 'Reply with ONLY JSON: {"understanding":"2-3 sentences on what they genuinely grasp, quoting their words","gaps":["1-3 important aspects they have not addressed"],"misconceptions":[{"name":"...","clarify":"2-3 sentences addressing what they wrote"}],"nextStep":"1-2 sentences, one concrete next step","beyondSource":false}'
+  ].join("\n");
+}
+
+async function runAI(respId){
+  const r = S.responses.find(x => x.id === respId); if(!r) return;
+  const q = allQ().find(x => x.id === r.questionId); if(!q) return;
+  if(!sampleFn){ r.ai = {status:"error", code:"unavailable"}; save(); render(); return; }
+
+  const ctl = new AbortController(); aiCtl[respId] = ctl;
+  r.ai = {status:"running", kbCount:kbFor(q.id).length}; save(); render();
+  try{
+    const data = await sampleFn.json(buildPrompt(r, q), { signal: ctl.signal, modelTier:"default" });
+    r.ai = {
+      status:"done",
+      kbCount: kbFor(q.id).length,
+      understanding: String(data.understanding||""),
+      gaps: Array.isArray(data.gaps) ? data.gaps.map(String) : [],
+      misconceptions: Array.isArray(data.misconceptions)
+        ? data.misconceptions.map(m => ({name:String(m && m.name||""), clarify:String(m && m.clarify||"")})) : [],
+      nextStep: String(data.nextStep||""),
+      beyondSource: Boolean(data.beyondSource)
+    };
+  }catch(e){
+    r.ai = {status:"error", code:(e && e.code) || "unknown", msg:(e && e.message) || ""};
+  }
+  delete aiCtl[respId];
+  save(); render();
+}
+
+function aiCopy(code){
+  const m = {
+    not_granted: p("你選擇不使用 AI 回饋（或未授權）。可再按一次重新產生。","AI feedback was not allowed for this view. Press regenerate to ask again."),
+    rate_limited: p("請求過於頻繁，請稍候再試。","Too many requests — wait a moment and try again."),
+    invalid_json: p("模型回覆格式不正確，請重新產生。","The model's reply was malformed — try regenerating."),
+    cancelled: p("已停止。","Stopped."),
+    prompt_too_large: p("內容過長，無法送出分析。","The content was too long to analyze."),
+    unavailable: p("此環境無法使用 AI 回饋。","AI feedback is unavailable in this view.")
+  };
+  return m[code] || p("AI 回饋失敗，請重新產生。","AI feedback failed — try regenerating.");
+}
+
+function renderAI(r){
+  const ai = r.ai;
+  if(!ai){
+    if(!sampleResolved) return "";
+    if(!sampleFn) return '<p class="muted" style="margin:10px 0 0">'+t("aiOff")+'</p>';
+    return '<button class="btn btn-o" style="margin-top:12px" data-ai="'+r.id+'">✦ '+t("askAI")+'</button>';
+  }
+  if(ai.status === "running")
+    return '<div class="fb-b" style="background:var(--plum-soft);border:1px solid color-mix(in srgb,var(--plum) 26%,transparent);margin-top:12px">'+
+      '<div class="fb-t" style="color:var(--plum)">✦ '+t("aiFb")+'</div>'+
+      '<div style="display:flex;align-items:center;gap:12px"><span class="muted">'+t("thinking")+'</span>'+
+      '<button class="btn btn-q" style="padding:5px 14px;font-size:13px" data-aistop="'+r.id+'">'+t("stop")+'</button></div></div>';
+  if(ai.status === "error")
+    return '<div class="fb-b fb-gap" style="margin-top:12px"><div class="fb-t">✦ '+t("aiFb")+'</div>'+
+      '<p style="margin:0 0 10px;color:var(--ink-soft)">'+esc(aiCopy(ai.code))+'</p>'+
+      '<button class="btn btn-o" style="padding:6px 15px;font-size:13.5px" data-ai="'+r.id+'">'+t("regen")+'</button></div>';
+
+  const badge = ai.kbCount
+    ? '<span class="chip c-acc">✓ '+t("grounded")+'（'+ai.kbCount+'）</span>'
+    : '<span class="chip c-nil">'+t("ungrounded")+'</span>';
+  const beyond = ai.beyondSource
+    ? '<span class="chip c-amb">⚠ '+t("beyond")+'</span>' : "";
+  const sec = (title, inner) => inner ? '<div style="margin-top:12px"><div style="font-size:12.5px;font-weight:700;color:var(--plum);letter-spacing:.02em;margin-bottom:4px">'+title+'</div>'+inner+'</div>' : "";
+
+  return '<div class="fb-b" style="background:var(--plum-soft);border:1px solid color-mix(in srgb,var(--plum) 26%,transparent);margin-top:12px">'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:4px">'+
+      '<span class="fb-t" style="color:var(--plum);margin:0">✦ '+t("aiFb")+'</span>'+badge+beyond+'</div>'+
+    sec(t("understand"), '<p style="margin:0;color:var(--ink-soft)">'+esc(ai.understanding)+'</p>')+
+    sec(t("stillGap"), ai.gaps.length ? '<ul>'+ai.gaps.map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>' : "")+
+    sec(t("clarify"), ai.misconceptions.length ? '<ul>'+ai.misconceptions.map(m=>'<li><b>'+esc(m.name)+'</b> — '+esc(m.clarify)+'</li>').join("")+'</ul>' : "")+
+    sec(t("nextStep"), '<p style="margin:0;color:var(--ink-soft)">'+esc(ai.nextStep)+'</p>')+
+    '<button class="btn btn-q" style="margin-top:14px;padding:5px 14px;font-size:13px" data-ai="'+r.id+'">'+t("regen")+'</button>'+
+  '</div>';
+}
+
+/* ── markdown-lite renderer ─────────────── */
+function rich(s){
+  return esc(s).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+}
+function renderContent(src){
+  const lines = String(src).replace(/\r\n/g,"\n").split("\n");
+  let out = "", list = null;
+  const flush = () => { if(list && list.length) out += "<ul>"+list.map(i=>"<li>"+rich(i)+"</li>").join("")+"</ul>"; list=null; };
+  for(const raw of lines){
+    const l = raw.trim();
+    if(!l){ flush(); continue; }
+    if(l.startsWith("- ")){ list = list||[]; list.push(l.slice(2)); continue; }
+    flush();
+    if(l.startsWith("## ")) out += "<h2>"+rich(l.slice(3))+"</h2>";
+    else if(l.startsWith("> ")) out += '<div class="q">'+rich(l.slice(2))+"</div>";
+    else if(l.startsWith("!! ")) out += '<div class="key">✦ '+rich(l.slice(3))+"</div>";
+    else if(l.startsWith("?? ")) out += '<p class="cap">'+rich(l.slice(3))+"</p>";
+    else out += "<p>"+rich(l)+"</p>";
+  }
+  flush();
+  return out;
+}
+
+/* ── small components ───────────────────── */
+function meter(label, value, detail, tone){
+  const col = tone==="orange" ? "var(--viz-orange)" : tone==="purple" ? "var(--viz-purple)" : "var(--viz-teal)";
+  const pct = Math.round(value*100);
+  return '<div class="meter"><div class="meter-h"><span class="meter-l">'+label+'</span>'+
+    '<span class="meter-v">'+pct+'%'+(detail?" · "+detail:"")+'</span></div>'+
+    '<div class="meter-t"><div class="meter-f" style="width:'+Math.max(pct,1.5)+'%;background:'+col+'"></div></div></div>';
+}
+function statusChip(st){
+  if(st==="COMPLETED") return '<span class="chip c-acc">'+t("done")+'</span>';
+  if(st) return '<span class="chip c-amb">'+t("ing")+'</span>';
+  return '<span class="chip c-nil">'+t("not")+'</span>';
+}
+
+/* ── navigation ─────────────────────────── */
+function navItems(){
+  if(S.role==="LEARNER") return [
+    {v:"home", ico:"◈", label:t("home")},
+    {v:"profile", ico:"◔", label:t("profile")}
+  ];
+  if(S.role==="RESEARCHER") return [
+    {v:"dash", ico:"▤", label:t("dash")},
+    {v:"home", ico:"◈", label:p("前台（學習端）","Front stage")}
+  ];
+  return [
+    {v:"dash", ico:"▤", label:t("dash")},
+    {v:"content", ico:"✎", label:t("content")},
+    {v:"kb", ico:"❋", label:t("kb")},
+    {v:"roles", ico:"◎", label:t("roles")},
+    {v:"home", ico:"◈", label:p("前台（學習端）","Front stage")}
+  ];
+}
+function renderNav(){
+  const items = navItems();
+  const cur = S.view==="chapter" ? "home" : S.view;
+  const link = (i,cls) => '<a href="#" class="'+cls+(i.v===cur?" on":"")+'" data-go="'+i.v+'">'+
+    (cls==="" ? '<span class="ico">'+i.ico+'</span>' : "")+i.label+'</a>';
+  document.getElementById("rail").innerHTML =
+    '<div class="railtitle">'+(S.role==="LEARNER"?p("學習","Learning"):p("後台","Backstage"))+'</div>'+
+    items.map(i=>link(i,"")).join("");
+  document.getElementById("railm").innerHTML = items.map(i=>link(i,"m")).join("");
+}
+function renderRoleSeg(){
+  const roles = [["LEARNER",t("learner")],["RESEARCHER",t("researcher")],["ADMIN",t("admin")]];
+  document.getElementById("roleSeg").innerHTML = roles.map(([r,l])=>
+    '<button data-role="'+r+'" aria-pressed="'+(S.role===r)+'">'+l+'</button>').join("");
+}
+
+/* ── views ──────────────────────────────── */
+function viewHome(){
+  const doneN = DATA.filter(c=>S.progress[c.slug]==="COMPLETED").length;
+  const nextCh = DATA.find(c=>S.progress[c.slug]!=="COMPLETED");
+  const started = Object.keys(S.progress).length>0;
+
+  const hero = started ? "" :
+    '<section style="margin-bottom:34px">'+
+      '<p style="color:var(--accent);font-size:14px;font-weight:600;letter-spacing:.04em;margin:0 0 12px">'+
+        p("師資培育互動學習系統","An interactive faculty development course")+'</p>'+
+      '<h1 style="font-size:clamp(31px,5.4vw,45px);line-height:1.16">The End of Validity '+
+        '<span style="color:var(--accent)">as We Know It</span></h1>'+
+      '<p style="font-size:18.5px;color:var(--ink-soft);margin:16px 0 0;max-width:36em">'+
+        p("在 programmatic assessment（計畫性評量）的時代，我們該如何重新思考評量的效度？跟著 AMEE 2026 專題研討六位講者的思路，走過六章的閱讀、反思與回饋。",
+          "How should we think about validity in an era of programmatic assessment? Follow the six speakers of the AMEE 2026 symposium through six chapters of reading, reflection and feedback.")+'</p>'+
+      /* the subject's most arresting object: the two-shift case */
+      '<div class="card twoshift">'+
+        '<div><div class="muted" style="margin-bottom:3px">'+p("星期一","Monday")+'</div>'+
+          '<div style="font-family:var(--display);font-size:23px;font-weight:600">Level 2</div>'+
+          '<div class="muted">'+p("需直接督導","direct supervision required")+'</div></div>'+
+        '<div><div class="muted" style="margin-bottom:3px">'+p("星期四","Thursday")+'</div>'+
+          '<div style="font-family:var(--display);font-size:23px;font-weight:600;color:var(--accent)">Level 4</div>'+
+          '<div class="muted">'+p("可獨立執業（保留監督）","unsupervised practice with oversight")+'</div></div>'+
+        '<div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;font-family:var(--display);font-style:italic;font-size:18px">'+
+          p("同一位住院醫師，同一週——哪一個是測量誤差？","Same resident, same week — which one was the measurement error?")+'</div>'+
+      '</div>'+
+    '</section>';
+
+  const fourQ = started ? "" :
+    '<section class="card" style="padding:26px 28px;margin-bottom:34px">'+
+      '<h2 style="font-size:20px;margin-bottom:16px">'+t("fourQ")+'</h2>'+
+      '<div class="grid2">'+[
+        p("當評量無法標準化，我們如何知道它是可信的？","Without standardization, how do we know assessments are reliable?"),
+        p("有效的工具，等於有效的評量系統嗎？","Does a valid tool equal a valid program of assessment?"),
+        p("不標準化的評量，如何談公平？","What does equitable assessment mean without standardization?"),
+        p("形成性的資料，如何支撐總結性的決策？","How can formative data support summative decisions?")
+      ].map((q,i)=>'<div style="display:flex;gap:13px"><span style="font-family:var(--display);color:var(--accent);font-weight:600;font-size:19px">'+(i+1)+'</span>'+
+        '<span style="color:var(--ink-soft);font-size:15.5px">'+q+'</span></div>').join("")+'</div>'+
+    '</section>';
+
+  const progressBar = started ?
+    '<div style="margin-bottom:30px">'+
+      '<p style="margin:0 0 9px;color:var(--ink-soft)">'+p("你已完成","You have completed")+
+        ' <b style="color:var(--accent-deep)" class="num">'+doneN+'</b> / '+DATA.length+' '+p("章","chapters")+'</p>'+
+      '<div class="meter-t"><div class="meter-f" style="width:'+(doneN/DATA.length*100)+'%;background:var(--viz-teal)"></div></div>'+
+    '</div>' : "";
+
+  const contCard = (started && nextCh) ?
+    '<a href="#" data-ch="'+nextCh.slug+'" class="card" style="display:block;padding:20px 24px;margin-bottom:30px;text-decoration:none;border-color:color-mix(in srgb,var(--accent) 30%,transparent)">'+
+      '<div class="muted" style="margin-bottom:2px">'+t("cont")+' →</div>'+
+      '<div style="font-family:var(--display);font-size:20px;font-weight:600;color:var(--accent-deep)">'+
+        t("ch")+' '+nextCh.order+'・'+esc(p(nextCh.titleZh,nextCh.titleEn))+'</div></a>' : "";
+
+  const list = DATA.map(c=>{
+    const st = S.progress[c.slug];
+    return '<a href="#" data-ch="'+c.slug+'" class="card" style="display:flex;gap:18px;align-items:center;padding:18px 22px;text-decoration:none">'+
+      '<span style="font-family:var(--display);flex:none;width:42px;height:42px;border-radius:12px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-size:18px;font-weight:600;color:var(--accent)">'+c.order+'</span>'+
+      '<span style="flex:1;min-width:0">'+
+        '<span style="display:block;font-family:var(--display);font-size:17.5px;font-weight:600">'+esc(p(c.titleZh,c.titleEn))+'</span>'+
+        '<span class="muted">'+esc(c.speaker)+' · '+c.minutes+' '+t("min")+'</span></span>'+
+      statusChip(st)+'</a>';
+  }).join("");
+
+  return hero + fourQ + progressBar + contCard +
+    '<h2 style="font-size:21px;margin-bottom:16px">'+t("chapters6")+'</h2>'+
+    '<div class="stack" style="gap:13px">'+list+'</div>';
+}
+
+function viewChapter(){
+  const c = chBySlug(S.slug); if(!c) return viewHome();
+  if(!S.progress[c.slug]){ S.progress[c.slug] = "VIEWED"; save(); }
+  const i = DATA.indexOf(c);
+  const prev = i>0 ? DATA[i-1] : null, next = i<DATA.length-1 ? DATA[i+1] : null;
+  const isDone = S.progress[c.slug]==="COMPLETED";
+
+  const qs = c.questions.map(q=>{
+    const mine = S.responses.filter(r=>r.questionId===q.id);
+    const past = mine.map((r,n)=>{
+      const fb = r.fb;
+      const block = (arr,cls,title) => arr.length ?
+        '<div class="fb-b '+cls+'"><div class="fb-t">'+title+'</div><ul>'+
+        arr.map(x=>'<li><b>'+esc(p(x.labelZh,x.labelEn))+'</b> — '+esc(p(x.msgZh,x.msgEn))+'</li>').join("")+'</ul></div>' : "";
+      return '<div style="margin-bottom:18px">'+
+        '<div class="muted" style="margin-bottom:6px">'+t("prevAns")+' #'+(n+1)+' · '+new Date(r.at).toLocaleString()+'</div>'+
+        '<div class="ans">'+esc(r.text)+'</div>'+
+        '<div class="muted" style="margin:12px 0 2px;font-size:12.5px;letter-spacing:.03em">'+t("ruleFb")+'</div>'+
+        '<div class="fb">'+
+          block(fb.hits,"fb-hit","✓ "+p("你已觸及的概念","Concepts you engaged"))+
+          block(fb.flags,"fb-flag","⚠ "+p("值得澄清的概念","Worth clarifying"))+
+          block(fb.gaps,"fb-gap","◌ "+p("可以再想想","Push further"))+
+        '</div>'+
+        renderAI(r)+'</div>';
+    }).join("");
+
+    const hint = (q.hintZh||q.hintEn) ?
+      '<details style="margin:11px 0 0"><summary style="cursor:pointer;color:var(--accent);font-size:14px">'+t("hint")+'</summary>'+
+      '<p class="muted" style="margin:8px 0 0;padding:10px 14px;background:var(--paper);border:1px solid var(--line);border-radius:11px">'+
+      esc(p(q.hintZh||"",q.hintEn||""))+'</p></details>' : "";
+
+    return '<div class="card" style="padding:24px 26px">'+
+      '<div style="display:flex;gap:13px;align-items:flex-start">'+
+        '<span style="flex:none;width:34px;height:32px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600">Q'+q.order+'</span>'+
+        '<p style="margin:0;font-weight:500;line-height:1.75">'+esc(p(q.promptZh,q.promptEn))+'</p></div>'+
+      hint+
+      (past?'<div style="margin-top:20px">'+past+'</div>':"")+
+      '<div style="margin-top:16px">'+
+        '<textarea data-q="'+q.id+'" placeholder="'+t("yours")+'"></textarea>'+
+        '<div class="muted" data-err="'+q.id+'" style="color:#c0392b;margin-top:6px;display:none"></div>'+
+        '<div style="margin-top:11px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">'+
+          '<button class="btn" data-submit="'+q.id+'">'+(mine.length?t("again"):t("submit"))+'</button>'+
+          '<span class="muted">'+p("回答會儲存在你的瀏覽器，並即時分析","Saved in your browser and analyzed instantly")+'</span>'+
+        '</div></div></div>';
+  }).join("");
+
+  return '<div style="margin-bottom:20px"><a href="#" data-go="home" class="muted" style="text-decoration:none">← '+t("back")+'</a></div>'+
+    '<header style="margin-bottom:26px">'+
+      '<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px">'+
+        '<span class="chip c-acc">'+t("ch")+' '+c.order+'</span>'+
+        '<span class="chip c-nil">'+esc(c.speaker)+'</span>'+
+        '<span class="chip c-nil">'+c.minutes+' '+t("min")+'</span></div>'+
+      '<h1 style="font-size:clamp(26px,4.4vw,34px)">'+esc(p(c.titleZh,c.titleEn))+'</h1>'+
+      '<p style="font-size:17.5px;color:var(--ink-soft);margin:13px 0 0">'+esc(p(c.summaryZh,c.summaryEn))+'</p>'+
+    '</header>'+
+    '<article class="card ct" style="padding:28px 30px">'+renderContent(p(c.contentZh,c.contentEn))+'</article>'+
+    '<section style="margin-top:44px">'+
+      '<h2 style="font-size:22px;margin-bottom:7px">'+t("reflect")+'</h2>'+
+      '<p class="muted" style="margin:0 0 20px">'+
+        p("沒有標準答案——這些問題是為了幫助你把概念連結到自己的教學現場。","No model answers — these questions connect the concepts to your own teaching practice.")+'</p>'+
+      '<div class="stack" style="gap:18px">'+qs+'</div></section>'+
+    '<div class="card" style="margin-top:40px;padding:20px 24px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">'+
+      (isDone ? '<span class="chip c-acc" style="padding:8px 16px">✓ '+t("marked")+'</span>'
+              : '<button class="btn" data-done="'+c.slug+'">'+t("mark")+'</button>')+
+      '<span style="margin-left:auto;display:flex;gap:9px;flex-wrap:wrap">'+
+        (prev?'<a href="#" data-ch="'+prev.slug+'" class="btn btn-o" style="text-decoration:none">← '+t("prev")+'</a>':"")+
+        '<a href="#" data-go="home" class="btn btn-q" style="text-decoration:none">'+t("back")+'</a>'+
+        (next?'<a href="#" data-ch="'+next.slug+'" class="btn btn-o" style="text-decoration:none">'+t("next")+' →</a>':"")+
+      '</span></div>';
+}
+
+function viewProfile(){
+  const doneN = DATA.filter(c=>S.progress[c.slug]==="COMPLETED").length;
+  const rows = DATA.map(c=>{
+    const st = S.progress[c.slug];
+    const n = S.responses.filter(r=>c.questions.some(q=>q.id===r.questionId)).length;
+    return '<div style="display:flex;gap:16px;align-items:center;padding:14px 22px">'+
+      '<span style="font-family:var(--display);flex:none;width:36px;height:36px;border-radius:10px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-weight:600;color:var(--accent)">'+c.order+'</span>'+
+      '<span style="flex:1;min-width:0"><span style="display:block;font-weight:500">'+esc(p(c.titleZh,c.titleEn))+'</span>'+
+      '<span class="muted">'+n+' '+p("則反思","reflections")+'</span></span>'+statusChip(st)+'</div>';
+  }).join("");
+  return '<h1 style="font-size:30px">'+t("profile")+'</h1>'+
+    '<p class="muted" style="margin:8px 0 26px">'+p("學習紀錄保存在這台裝置的瀏覽器中。","Your record is kept in this browser on this device.")+'</p>'+
+    '<div class="tiles" style="margin-bottom:30px">'+
+      '<div class="card tile"><div class="tile-n">'+doneN+' / '+DATA.length+'</div><div class="tile-l">'+p("完成章節","Chapters completed")+'</div></div>'+
+      '<div class="card tile"><div class="tile-n">'+S.responses.length+'</div><div class="tile-l">'+p("反思回答","Reflections written")+'</div></div>'+
+      '<div class="card tile"><div class="tile-n">'+Math.round(doneN/DATA.length*100)+'%</div><div class="tile-l">'+p("完課率","Completion")+'</div></div>'+
+    '</div>'+
+    '<div class="card rowlist stack">'+rows+'</div>';
+}
+
+function viewDash(){
+  const rs = S.responses;
+  const hot = [], cov = [];
+  DATA.forEach(c=>c.questions.forEach(q=>{
+    const rows = rs.filter(r=>r.questionId===q.id);
+    if(!rows.length) return;
+    (q.rubric.misconceptions||[]).forEach(m=>{
+      const n = rows.filter(r=>r.fb.flags.some(f=>f.key===m.key)).length;
+      if(n) hot.push({label:p(m.labelZh,m.labelEn), ch:c, q, n, total:rows.length});
+    });
+    (q.rubric.concepts||[]).forEach(cc=>{
+      const n = rows.filter(r=>r.fb.hits.some(h=>h.key===cc.key)).length;
+      cov.push({label:p(cc.labelZh,cc.labelEn), ch:c, q, n, total:rows.length});
+    });
+  }));
+  hot.sort((a,b)=>b.n/b.total - a.n/a.total);
+
+  const empty = rs.length===0;
+  const tiles = '<div class="tiles" style="margin-bottom:30px">'+
+    '<div class="card tile"><div class="tile-n">'+rs.length+'</div><div class="tile-l">'+p("反思回應","Responses")+'</div></div>'+
+    '<div class="card tile"><div class="tile-n">'+new Set(rs.map(r=>r.questionId)).size+' / '+allQ().length+'</div><div class="tile-l">'+p("已作答題數","Questions answered")+'</div></div>'+
+    '<div class="card tile"><div class="tile-n">'+hot.reduce((a,h)=>a+h.n,0)+'</div><div class="tile-l">'+p("誤區訊號","Misconception flags")+'</div></div>'+
+    '<div class="card tile"><div class="tile-n">'+DATA.filter(c=>S.progress[c.slug]==="COMPLETED").length+' / '+DATA.length+'</div><div class="tile-l">'+p("完成章節","Chapters completed")+'</div></div>'+
+  '</div>';
+
+  const hotBox = '<section style="margin-bottom:32px"><h2 style="font-size:20px;margin-bottom:5px">⚠ '+p("常見誤區雷達","Misconception radar")+'</h2>'+
+    '<p class="muted" style="margin:0 0 14px">'+p("依觸發比例排序：回答中出現特定誤解模式的比例","Sorted by trigger rate: share of answers matching a misconception pattern")+'</p>'+
+    '<div class="card" style="padding:18px 24px">'+
+    (hot.length ? hot.map(h=>meter(esc(h.label)+' <span class="muted">— '+esc(p(h.ch.titleZh,h.ch.titleEn))+' Q'+h.q.order+'</span>', h.n/h.total, h.n+"/"+h.total, "orange")).join("")
+                : '<p class="muted" style="margin:0">'+p("目前沒有誤區訊號。","No misconception signals yet.")+'</p>')+
+    '</div></section>';
+
+  const covBox = '<section style="margin-bottom:32px"><h2 style="font-size:20px;margin-bottom:14px">'+p("概念掌握熱度","Concept coverage")+'</h2>'+
+    '<div class="stack" style="gap:15px">'+
+    DATA.map(c=>{
+      const items = cov.filter(x=>x.ch===c);
+      if(!items.length) return "";
+      return '<div class="card" style="padding:20px 24px">'+
+        '<div style="font-family:var(--display);font-weight:600;margin-bottom:10px">'+t("ch")+' '+c.order+'・'+esc(p(c.titleZh,c.titleEn))+'</div>'+
+        items.map(x=>meter(esc(x.label)+' <span class="muted">Q'+x.q.order+'</span>', x.total?x.n/x.total:0, x.n+"/"+x.total, "teal")).join("")+'</div>';
+    }).join("")+'</div></section>';
+
+  const recent = rs.slice().reverse().slice(0,10).map(r=>{
+    const q = allQ().find(x=>x.id===r.questionId); if(!q) return "";
+    return '<div style="padding:16px 22px">'+
+      '<div class="muted" style="margin-bottom:5px">'+esc(p(q.ch.titleZh,q.ch.titleEn))+' Q'+q.order+' · '+new Date(r.at).toLocaleString()+
+        ' <span class="chip c-acc" style="margin-left:6px">'+p("概念","concepts")+' '+r.fb.hits.length+(r.fb.flags.length?' · ⚠ '+r.fb.flags.length:"")+'</span></div>'+
+      '<div style="color:var(--ink-soft);font-size:14.5px;white-space:pre-wrap">'+esc(r.text)+'</div></div>';
+  }).join("");
+
+  return '<div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px">'+
+      '<h1 style="font-size:30px">'+t("dash")+'</h1>'+
+      '<button class="btn btn-o" id="csvBtn">⬇ '+p("下載 CSV","Export CSV")+'</button></div>'+
+    '<p class="muted" style="margin:0 0 22px;max-width:44em">'+
+      p("這裡分析的是<b>你在這台裝置上的作答</b>。正式版（本機全端系統）會彙整所有學習者的回應，並可接上 Claude API 做深度誤解分析。",
+        "This analyzes <b>your own answers on this device</b>. The full local system aggregates all learners and can call the Claude API for deep misconception analysis.")+'</p>'+
+    (empty ? '<div class="notice" style="margin-bottom:26px"><span>◔</span><span>'+
+        p("尚無資料。切換到<b>學員</b>視角、進任一章作答一題，統計就會即時出現在這裡——那個閉環正是這套系統的核心。",
+          "No data yet. Switch to the <b>Learner</b> view, answer one reflection in any chapter, and the analytics appear here — that closed loop is the core of this system.")+
+      '</span></div>' : "")+
+    tiles + hotBox + covBox +
+    (recent ? '<section><h2 style="font-size:20px;margin-bottom:14px">'+p("最新回應","Recent responses")+'</h2>'+
+      '<div class="card rowlist stack">'+recent+'</div></section>' : "");
+}
+
+function viewContent(){
+  const rows = DATA.map(c=>
+    '<div style="display:flex;gap:16px;align-items:center;padding:15px 22px">'+
+      '<span style="font-family:var(--display);flex:none;width:38px;height:38px;border-radius:11px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-weight:600;color:var(--accent)">'+c.order+'</span>'+
+      '<span style="flex:1;min-width:0"><span style="display:block;font-weight:500">'+esc(p(c.titleZh,c.titleEn))+'</span>'+
+      '<span class="muted">'+esc(c.speaker)+' · '+c.questions.length+' '+p("題","questions")+' · '+
+        c.questions.reduce((a,q)=>a+(q.rubric.concepts||[]).length,0)+' '+p("個概念規則","concept rules")+' · '+
+        c.questions.reduce((a,q)=>a+(q.rubric.misconceptions||[]).length,0)+' '+p("個誤區規則","misconception rules")+'</span></span>'+
+      '<a href="#" data-edit="'+c.slug+'" class="btn btn-o" style="text-decoration:none;padding:7px 16px;font-size:14px">'+p("編輯","Edit")+'</a></div>').join("");
+  return '<h1 style="font-size:30px">'+t("content")+'</h1>'+
+    '<p class="muted" style="margin:8px 0 22px;max-width:44em">'+
+      p("在正式版中，管理者可在這裡新增章節、改寫內容與回饋規則，改動即時生效於前台。此預覽版的編輯只存在你的瀏覽器。",
+        "In the full system an admin adds chapters and rewrites content and rubrics here, live to the front stage. Edits in this preview stay in your browser.")+'</p>'+
+    '<div class="card rowlist stack">'+rows+'</div>';
+}
+
+function viewEditor(){
+  const c = chBySlug(S.slug); if(!c) return viewContent();
+  return '<div style="margin-bottom:18px"><a href="#" data-go="content" class="muted" style="text-decoration:none">← '+p("回到內容列表","Back to content list")+'</a></div>'+
+    '<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:20px">'+
+      '<h1 style="font-size:26px">'+p("編輯章節","Edit chapter")+'：'+esc(p(c.titleZh,c.titleEn))+'</h1>'+
+      '<button class="btn" id="saveCh">'+p("套用變更","Apply changes")+'</button></div>'+
+    '<div class="card" style="padding:24px 26px;margin-bottom:20px">'+
+      '<div class="grid2">'+
+        '<div><label class="lbl">'+p("標題（中）","Title (zh)")+'</label><input id="e-titleZh" value="'+esc(c.titleZh)+'"></div>'+
+        '<div><label class="lbl">'+p("標題（英）","Title (en)")+'</label><input id="e-titleEn" value="'+esc(c.titleEn)+'"></div>'+
+        '<div><label class="lbl">'+p("摘要（中）","Summary (zh)")+'</label><textarea id="e-sumZh" style="min-height:88px">'+esc(c.summaryZh)+'</textarea></div>'+
+        '<div><label class="lbl">'+p("摘要（英）","Summary (en)")+'</label><textarea id="e-sumEn" style="min-height:88px">'+esc(c.summaryEn)+'</textarea></div>'+
+      '</div></div>'+
+    '<div class="card" style="padding:24px 26px;margin-bottom:20px">'+
+      '<h2 style="font-size:18px;margin-bottom:4px">'+p("學習內容","Learning content")+'</h2>'+
+      '<p class="muted" style="margin:0 0 16px">'+
+        p("格式：<code>##</code> 標題、<code>&gt;</code> 引文、<code>-</code> 條列、<code>!!</code> 重點卡、<code>??</code> 出處、<code>**粗體**</code>",
+          "Syntax: <code>##</code> heading, <code>&gt;</code> quote, <code>-</code> bullet, <code>!!</code> key point, <code>??</code> citation, <code>**bold**</code>")+'</p>'+
+      '<label class="lbl">'+p("內容（"+(S.lang==="zh"?"中文":"英文")+"）","Content ("+(S.lang==="zh"?"Chinese":"English")+")")+'</label>'+
+      '<textarea id="e-content" style="min-height:340px;font-size:13.5px;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">'+
+        esc(S.lang==="zh"?c.contentZh:c.contentEn)+'</textarea></div>'+
+    '<div class="card" style="padding:24px 26px">'+
+      '<h2 style="font-size:18px;margin-bottom:14px">'+p("反思問題與回饋規則","Reflection questions & rubrics")+'</h2>'+
+      '<div class="stack" style="gap:16px">'+c.questions.map(q=>
+        '<div style="border:1px solid var(--line);border-radius:13px;padding:18px 20px;background:var(--paper)">'+
+          '<div style="font-weight:600;font-size:14px;margin-bottom:10px">Q'+q.order+'</div>'+
+          '<p style="margin:0 0 12px;color:var(--ink-soft);font-size:15px">'+esc(p(q.promptZh,q.promptEn))+'</p>'+
+          '<div class="scroll"><table><thead><tr><th>'+p("類型","Type")+'</th><th>'+p("規則名稱","Rule")+'</th><th>'+p("觸發關鍵字","Trigger keywords")+'</th></tr></thead><tbody>'+
+          (q.rubric.concepts||[]).map(cc=>'<tr><td><span class="chip c-acc">'+p("概念","concept")+'</span></td><td>'+esc(p(cc.labelZh,cc.labelEn))+'</td><td class="muted">'+esc((cc.keywords||[]).slice(0,7).join("、"))+'</td></tr>').join("")+
+          (q.rubric.misconceptions||[]).map(m=>'<tr><td><span class="chip c-amb">'+p("誤區","misconception")+'</span></td><td>'+esc(p(m.labelZh,m.labelEn))+'</td><td class="muted">'+esc((m.patterns||[]).slice(0,7).join("、"))+'</td></tr>').join("")+
+          '</tbody></table></div></div>').join("")+'</div></div>';
+}
+
+function viewKB(){
+  const rows = DATA.map(c => {
+    const qs = c.questions.map(q => {
+      const s = sufficiency(c, q);
+      const kb = kbFor(q.id);
+      const list = kb.length
+        ? '<div class="stack" style="gap:8px;margin:10px 0 0">'+kb.map((k,i)=>
+            '<div style="display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 14px">'+
+              '<span style="flex:1;min-width:0;font-size:14px;color:var(--ink-soft)">'+
+                (k.source?'<b style="color:var(--ink)">'+esc(k.source)+'</b> — ':"")+esc(k.text)+'</span>'+
+              (BAKED_KB[q.id] && i < BAKED_KB[q.id].length
+                ? '<span class="chip c-nil" style="flex:none">'+p("已內建","baked in")+'</span>'
+                : '<button class="mini" style="flex:none" data-kbdel="'+q.id+'|'+(i-((BAKED_KB[q.id]||[]).length))+'">'+t("del")+'</button>')+
+            '</div>').join("")+'</div>'
+        : "";
+      return '<div style="border-top:1px solid var(--line);padding:16px 0 4px">'+
+        '<div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px">'+
+          '<b style="font-size:14px">Q'+q.order+'</b>'+
+          '<span style="flex:1;min-width:200px;color:var(--ink-soft);font-size:14.5px">'+esc(p(q.promptZh,q.promptEn).slice(0,72))+'…</span>'+
+          '<span class="chip '+(s.tone==="teal"?"c-acc":s.tone==="orange"?"c-amb":"c-plum")+'">'+s.level+'</span></div>'+
+        meter(p("知識充足度","Sufficiency"),
+              s.score,
+              s.nk+' '+p("則審定","vetted")+' · '+s.nc+' '+p("概念","concepts")+' · '+s.nm+' '+p("誤區","misconceptions"),
+              s.tone)+
+        (s.todo.length ? '<p class="muted" style="margin:6px 0 0">'+p("建議補足：","To strengthen: ")+esc(s.todo.join("、"))+'</p>' : "")+
+        list+
+        '<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--accent);font-size:14px">＋ '+t("addK")+'</summary>'+
+          '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">'+
+            '<input data-ksrc="'+q.id+'" placeholder="'+t("source")+'">'+
+            '<textarea data-ktext="'+q.id+'" style="min-height:96px" placeholder="'+t("ktext")+'"></textarea>'+
+            '<div><button class="btn" style="padding:7px 18px;font-size:14px" data-kbadd="'+q.id+'">'+t("addK")+'</button></div>'+
+          '</div></details></div>';
+    }).join("");
+    return '<div class="card" style="padding:20px 24px">'+
+      '<div style="font-family:var(--display);font-weight:600;font-size:17px">'+t("ch")+' '+c.order+'・'+esc(p(c.titleZh,c.titleEn))+'</div>'+
+      '<div class="muted">'+(c.contentZh||"").replace(/\s/g,"").length+' '+p("字內容","chars of content")+' · '+c.questions.length+' '+p("題","questions")+'</div>'+
+      qs+'</div>';
+  }).join("");
+
+  const totalVetted = allQ().reduce((a,q)=>a+kbFor(q.id).length, 0);
+  const thin = allQ().filter(q => sufficiency(q.ch, q).score < .4).length;
+
+  return '<div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">'+
+      '<h1 style="font-size:30px">'+t("kb")+'</h1>'+
+      '<div style="display:flex;gap:9px;flex-wrap:wrap">'+
+        '<button class="btn btn-o" id="kbExport">⬇ '+t("exportK")+'</button>'+
+        '<button class="btn btn-q" id="kbImport">⬆ '+t("importK")+'</button></div></div>'+
+    '<p class="muted" style="margin:8px 0 22px;max-width:46em">'+
+      p("AI 回饋的依據有三層：<b>章節內容</b>（已內建）、<b>回饋規則</b>（概念與誤區，已內建）、<b>你審定的知識</b>（下方新增）。審定知識越充足，AI 回饋越貼近你的立場、越少依賴模型自身知識。",
+        "AI feedback rests on three layers: <b>chapter content</b> (built in), <b>feedback rules</b> (concepts and misconceptions, built in), and <b>your vetted knowledge</b> (added below). The more vetted knowledge, the closer the feedback stays to your position rather than the model's own.")+'</p>'+
+    '<div class="tiles" style="margin-bottom:24px">'+
+      '<div class="card tile"><div class="tile-n">'+totalVetted+'</div><div class="tile-l">'+p("審定知識則數","Vetted excerpts")+'</div></div>'+
+      '<div class="card tile"><div class="tile-n">'+allQ().length+'</div><div class="tile-l">'+p("反思題","Questions")+'</div></div>'+
+      '<div class="card tile"><div class="tile-n">32</div><div class="tile-l">'+p("概念規則","Concept rules")+'</div></div>'+
+      '<div class="card tile"><div class="tile-n" style="color:'+(thin?"var(--viz-orange)":"inherit")+'">'+thin+'</div><div class="tile-l">'+p("偏薄的題目","Thin questions")+'</div></div>'+
+    '</div>'+
+    '<div class="notice" style="margin-bottom:24px"><span>◈</span><span>'+
+      p("你在這裡新增的知識存在<b>你自己的瀏覽器</b>。要讓所有使用者都吃到，請按「匯出知識庫 JSON」，把檔案交回給我重新發布——內建之後就對每位開啟連結的人生效。",
+        "Knowledge added here lives in <b>your own browser</b>. To make it apply for everyone, use Export and hand the JSON back to be baked into a republish.")+
+    '</span></div>'+
+    '<div class="stack" style="gap:16px">'+rows+'</div>'+
+    '<textarea id="kbPaste" style="display:none"></textarea>';
+}
+
+function viewRoles(){
+  const rows = [
+    [p("瀏覽學習內容與作答","Read chapters and answer reflections"), 1,1,1],
+    [p("查看個人學習歷程","View own learning record"), 1,1,1],
+    [p("分析儀表板與誤區洞察","Analytics dashboard & insights"), 0,1,1],
+    [p("下載全體回應資料","Export all response data"), 0,1,1],
+    [p("執行 Claude 深度分析","Run Claude deep analysis"), 0,1,1],
+    [p("新增／編輯章節與回饋規則","Add & edit chapters and rubrics"), 0,0,1],
+    [p("管理帳號、權限與密碼重設","Manage accounts, roles, password resets"), 0,0,1],
+  ];
+  const yes = '<span style="color:var(--viz-teal);font-weight:700">✓</span>';
+  const no  = '<span class="muted">—</span>';
+  return '<h1 style="font-size:30px">'+t("roles")+'</h1>'+
+    '<p class="muted" style="margin:8px 0 22px;max-width:44em">'+
+      p("正式版採三層 RBAC，由伺服器端的 session 與中介層強制執行。此預覽版的角色切換僅供檢視三種介面，<b>不是</b>權限控制。",
+        "The full system enforces three-tier RBAC server-side via sessions and middleware. The switcher in this preview only changes which interface you see — it is <b>not</b> access control.")+'</p>'+
+    '<div class="card scroll" style="padding:6px 10px 10px"><table><thead><tr>'+
+      '<th>'+p("能力","Capability")+'</th><th style="text-align:center">'+t("learner")+'</th>'+
+      '<th style="text-align:center">'+t("researcher")+'</th><th style="text-align:center">'+t("admin")+'</th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td>'+r[0]+'</td>'+r.slice(1).map(v=>'<td style="text-align:center">'+(v?yes:no)+'</td>').join("")+'</tr>').join("")+
+    '</tbody></table></div>'+
+    '<div class="notice" style="margin-top:22px"><span>◎</span><span>'+
+      p("正式版的帳號密碼以 bcrypt 雜湊儲存，session 用簽章 JWT，路由由 middleware 依角色攔截；管理者可重設任何人的密碼，但不會看到明文。",
+        "In the full system passwords are bcrypt-hashed, sessions are signed JWTs, and routes are gated by role in middleware; an admin can reset anyone's password but never sees it.")+
+    '</span></div>';
+}
+
+/* ── render ─────────────────────────────── */
+function render(){
+  document.documentElement.lang = S.lang==="zh" ? "zh-Hant-TW" : "en";
+  document.getElementById("brandT").textContent = t("site");
+  document.getElementById("langBtn").textContent = t("lang");
+  renderRoleSeg(); renderNav();
+
+  const v = document.getElementById("view");
+  const wide = ["dash","content","editor","roles","kb"].includes(S.view);
+  let html;
+  if(S.view==="chapter") html = viewChapter();
+  else if(S.view==="profile") html = viewProfile();
+  else if(S.view==="dash") html = viewDash();
+  else if(S.view==="content") html = viewContent();
+  else if(S.view==="editor") html = viewEditor();
+  else if(S.view==="roles") html = viewRoles();
+  else if(S.view==="kb") html = viewKB();
+  else html = viewHome();
+
+  const banner = '<div class="notice" style="margin-bottom:26px"><span aria-hidden>◈</span><span>'+
+    p("回饋分兩層：<b>規則回饋</b>是確定性的——同一組概念命中就給同一段預寫文字，所以會重複；<b>AI 個別化回饋</b>由 Claude 讀你實際寫的內容生成，每次都不同，使用你自己的 Claude 額度，第一次會徵詢同意。學習紀錄只存在你的瀏覽器。",
+      "Feedback comes in two layers. <b>Rule-based feedback</b> is deterministic — the same matched concepts always yield the same pre-written text, so it repeats. <b>AI feedback</b> is written by Claude from what you actually wrote, different every time; it uses your own Claude usage and asks consent on the first call. Your record stays in your browser.")+
+    '</span></div>';
+
+  v.className = wide ? "wrap-wide" : "wrap";
+  const showBanner = S.view === "home" || S.view === "dash";
+  v.innerHTML = (showBanner ? banner : "") + html;
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ── events ─────────────────────────────── */
+document.addEventListener("click", e => {
+  const roleB = e.target.closest("[data-role]");
+  if(roleB){ S.role = roleB.dataset.role;
+    S.view = S.role==="LEARNER" ? "home" : "dash"; save(); render(); return; }
+
+  const go = e.target.closest("[data-go]");
+  if(go){ e.preventDefault(); S.view = go.dataset.go; save(); render(); return; }
+
+  const ch = e.target.closest("[data-ch]");
+  if(ch){ e.preventDefault(); S.slug = ch.dataset.ch; S.view = "chapter"; save(); render(); return; }
+
+  const ed = e.target.closest("[data-edit]");
+  if(ed){ e.preventDefault(); S.slug = ed.dataset.edit; S.view = "editor"; save(); render(); return; }
+
+  const dn = e.target.closest("[data-done]");
+  if(dn){ S.progress[dn.dataset.done] = "COMPLETED"; save(); render(); return; }
+
+  const aiB = e.target.closest("[data-ai]");
+  if(aiB){ runAI(aiB.dataset.ai); return; }
+
+  const aiS = e.target.closest("[data-aistop]");
+  if(aiS){ const c = aiCtl[aiS.dataset.aistop]; if(c) c.abort(); return; }
+
+  const kbAdd = e.target.closest("[data-kbadd]");
+  if(kbAdd){
+    const qid = kbAdd.dataset.kbadd;
+    const src = document.querySelector('[data-ksrc="'+qid+'"]').value.trim();
+    const txt = document.querySelector('[data-ktext="'+qid+'"]').value.trim();
+    if(txt.length < 10) return;
+    S.kb = S.kb || {}; S.kb[qid] = S.kb[qid] || [];
+    S.kb[qid].push({source:src, text:txt});
+    save(); render(); return;
+  }
+
+  const kbDel = e.target.closest("[data-kbdel]");
+  if(kbDel){
+    const [qid, idx] = kbDel.dataset.kbdel.split("|");
+    if(S.kb && S.kb[qid]) S.kb[qid].splice(Number(idx), 1);
+    save(); render(); return;
+  }
+
+  if(e.target.closest("#kbExport")){ exportKB(); return; }
+  if(e.target.closest("#kbImport")){ importKB(); return; }
+
+  const sb = e.target.closest("[data-submit]");
+  if(sb){
+    const id = sb.dataset.submit;
+    const ta = document.querySelector('textarea[data-q="'+id+'"]');
+    const err = document.querySelector('[data-err="'+id+'"]');
+    const text = ta.value.trim();
+    if(text.length < 5){ err.textContent = t("short"); err.style.display="block"; ta.focus(); return; }
+    const q = allQ().find(x=>x.id===id);
+    const rid = "r"+Date.now();
+    S.responses.push({ id:rid, questionId:id, text, lang:S.lang, at:Date.now(), fb:analyze(text, q.rubric) });
+    save(); render();
+    if(sampleFn) runAI(rid);          // individualized feedback right after the deterministic pass
+    return;
+  }
+
+  if(e.target.closest("#saveCh")){
+    const c = chBySlug(S.slug);
+    c.titleZh = document.getElementById("e-titleZh").value;
+    c.titleEn = document.getElementById("e-titleEn").value;
+    c.summaryZh = document.getElementById("e-sumZh").value;
+    c.summaryEn = document.getElementById("e-sumEn").value;
+    if(S.lang==="zh") c.contentZh = document.getElementById("e-content").value;
+    else c.contentEn = document.getElementById("e-content").value;
+    S.view = "content"; render();
+    return;
+  }
+
+  if(e.target.closest("#csvBtn")){ exportCsv(); return; }
+
+  if(e.target.closest("#langBtn")){ S.lang = S.lang==="zh" ? "en" : "zh"; save(); render(); return; }
+});
+
+/* ── CSV / knowledge-pack export via the downloads capability ── */
+function csvText(){
+  const head = ["chapter_order","chapter","question_order","question","answered_at","lang","answer","concepts_hit","concepts_missing","misconception_flags","score"];
+  const q = s => '"'+String(s==null?"":s).replace(/"/g,'""')+'"';
+  const lines = [head.join(",")];
+  S.responses.forEach(r=>{
+    const qq = allQ().find(x=>x.id===r.questionId); if(!qq) return;
+    lines.push([qq.ch.order, qq.ch.titleEn, qq.order, qq.promptEn, new Date(r.at).toISOString(), r.lang, r.text,
+      r.fb.hits.map(h=>h.key).join("; "), r.fb.gaps.map(g=>g.key).join("; "),
+      r.fb.flags.map(f=>f.key).join("; "), Math.round(r.fb.score*100)/100].map(q).join(","));
+  });
+  return "\uFEFF" + lines.join("\r\n");
+}
+
+async function offerFile(btnId, filename, data, emptyMsg){
+  const btn = document.getElementById(btnId);
+  if(emptyMsg){ btn.textContent = emptyMsg; setTimeout(()=>render(),1800); return; }
+  if(!downloadsFn){ btn.textContent = p("此環境無法下載檔案","Downloads unavailable here"); setTimeout(()=>render(),2200); return; }
+  try{
+    await downloadsFn.save({ filename, data });
+    btn.textContent = "✓ " + p("已下載","Saved"); setTimeout(()=>render(),1800);
+  }catch(err){
+    btn.textContent = err && err.code === "declined" ? p("已取消","Cancelled") : p("下載失敗","Export failed");
+    setTimeout(()=>render(),2000);
+  }
+}
+
+function exportCsv(){
+  return offerFile("csvBtn", "validity-lab-responses.csv", csvText(),
+    S.responses.length ? null : p("目前沒有資料可下載","No data to export"));
+}
+
+function exportKB(){
+  const pack = {};
+  allQ().forEach(q => { const own = (S.kb && S.kb[q.id]) || []; if(own.length) pack[q.id] = own; });
+  const n = Object.keys(pack).length;
+  return offerFile("kbExport", "validity-lab-knowledge.json",
+    JSON.stringify(pack, null, 2),
+    n ? null : p("尚未新增審定知識","No vetted knowledge added yet"));
+}
+
+function importKB(){
+  const raw = prompt(p("貼上先前匯出的知識庫 JSON：","Paste a previously exported knowledge JSON:"));
+  if(!raw) return;
+  try{
+    const obj = JSON.parse(raw);
+    if(!obj || typeof obj !== "object" || Array.isArray(obj)) throw new Error("shape");
+    S.kb = S.kb || {};
+    Object.keys(obj).forEach(qid => {
+      if(!Array.isArray(obj[qid])) return;
+      const clean = obj[qid]
+        .filter(k => k && typeof k.text === "string" && k.text.trim())
+        .map(k => ({source:String(k.source||""), text:String(k.text)}));
+      if(clean.length) S.kb[qid] = (S.kb[qid]||[]).concat(clean);
+    });
+    save(); render();
+  }catch(e){
+    alert(p("JSON 格式不正確，未匯入。","That JSON could not be read — nothing was imported."));
+  }
+}
+
+render();
+</script>
